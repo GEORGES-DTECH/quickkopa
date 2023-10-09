@@ -1,0 +1,66 @@
+{%load static%} 
+{%load humanize%} 
+{%for saving in savings%}
+<tr>
+  <td data-label="Check">
+    <input
+      type="checkbox"
+      class="form-check-input"
+      name="ids"
+      value="{{saving.id}}"
+    />
+  </td>
+  <td data-label="Name">{{saving.client.full_name}}</td>
+
+  <td data-label="Phone">{{saving.client.phone1}}</td>
+  <td data-label="Savings">{{saving.savings|intcomma}}</td>
+  <td data-label="Withdraws">{{saving.withdraws|intcomma}}</td>
+  
+<td data-label="Balance">
+    {{saving.saving_balance|intcomma}}
+  </td>
+ <td data-label="View">
+    <div class="">
+      <a
+        class="dropdown-toggle bi bi-eye links"
+        role="button"
+        id="dropdownMenuLink"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+      </a>
+
+      <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+        <li>
+          <a
+            class="dropdown-item links bi bi-pencil-square"
+            role="button"
+            hx-get="{%url 'edit-saving' saving.id%}"
+            hx-target="#container"
+            preload
+            hx-push-url="true"
+            >Edit saving</a
+          >
+        </li>
+     
+        <hr class="divider" />
+        <li>
+          <a
+            class="dropdown-item links bi bi-file-spreadsheet"
+            role="button"
+            hx-get="{%url 'saving-statement' saving.id%}"
+            hx-target="#st-dialog"
+            preload
+            data-bs-toggle="modal"
+            data-bs-target="#static"
+            preload
+            > Statement</a
+          >
+        </li>
+
+      </ul>
+    </div>
+  </td>
+</tr>
+
+{%endfor%}

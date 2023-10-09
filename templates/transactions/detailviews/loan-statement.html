@@ -1,0 +1,165 @@
+{%load humanize%}
+
+<div class="modal-content">
+  <div class="modal-header">
+    <h2 class="modal-title text-center" id="static" style="margin-right: 15px">
+      Statement
+    </h2>
+    <a
+      class="bi bi-file-earmark-pdf"
+      onclick="printpdf()"
+      role="button"
+      style="color: #800; margin-right: 10px"
+      >Print</a
+    >
+
+    <a
+      class="bi bi-file-spreadsheet"
+      onclick="ExportToExcel()"
+      role="button"
+      style="color: #355e3b; margin-right: 10px"
+      >Excel Export</a
+    >
+    <button
+      type="button"
+      class="btn-close shadow-none"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <div class="container">
+      <div class="table-responsive">
+        <table class="table table-sm table-bordered  table-hover" id="statement">
+          <thead class="fw-bold" style="color: #366da5">
+            <tr>
+              <th scope="col">Date</th>
+              <th scope="col">Name</th>
+              <th scope="col">Id.no</th>
+              <th scope="col">Ref</th>
+              <th scope="col">Amount</th>
+              <th scope="col">Reason</th>
+              <th scope="col">Added by</th>
+            
+            </tr>
+          </thead>
+          <tbody>
+            {%for payment in payments%}
+
+            <tr>
+              <td>{{payment.payment_date|date:'j b,y'}}</td>
+
+              <td id="name">
+               
+                {{payment.transaction.client.full_name}}
+              </td>
+              <td>{{payment.BillRefNumber}}</td>
+              <td>{{payment.TransID}}</td>
+
+              {%if payment.amount is not None%}
+              <td>{{payment.amount|intcomma}}</td>
+              {%else%}
+              <td>0</td>
+              {%endif%}
+              <td>{{payment.payment_reason}}</td>
+              <td>
+                {{payment.staff.first_name}}
+                {{payment.staff.last_name}}
+              </td>
+            
+
+              <td data-label="Edit payment">
+                <a
+                  hx-get="{%url 'edit-payment' payment.id%}"
+                  hx-push-url="true"
+                  hx-target="#container"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                  role="button"
+                  class="links bi bi-pencil-square d-print-none"
+                ></a>
+              </td>
+            </tr>
+
+            {%endfor%}
+          
+
+            {%for payment in payments|slice:"1"%}
+          
+            <tr style="color: #222222" class="fw-bold">
+              <td>Loan payable</td>
+              <td>{{payment.transaction.payable_amount|intcomma}}</td>
+            </tr>
+            <tr style="color: #222222" class="fw-bold">
+              <td>Loan repayments</td>
+              <td>{{payment.transaction.repayments|intcomma}}</td>
+            </tr>
+           
+            <tr style="color: #222222" class="fw-bold">
+              <td>Outstanding</td>
+              <td>{{payment.transaction.outstanding_loan|intcomma}}</td>
+            </tr>
+            <tr style="color: #222222" class="fw-bold">
+              <td>Processing fee</td>
+              <td>{{payment.transaction.processing_fee|intcomma}}</td>
+            </tr>
+            <tr style="color: #222222" class="fw-bold">
+              <td>Registration</td>
+              <td>{{payment.transaction.registration|intcomma}}</td>
+            </tr>
+           
+     
+            <tr style="color: #222222" class="fw-bold">
+              <td>Arrears</td>
+              <td>
+                {{payment.transaction.arrears|intcomma}}
+              </td>
+            </tr>
+        
+          
+            <tr style="color: #222222" class="fw-bold">
+              <td>Penalties paid</td>
+              <td>
+                {{payment.transaction.penalties_payment|intcomma}}
+              </td>
+            </tr>
+            
+          
+            {%endfor%}
+          </tbody>
+        </table>
+      </div>
+
+      <script type="text/javascript">
+        function ExportToExcel(type, fn, dl) {
+          let elt = document.getElementById("statement");
+          let name = document.getElementById("name").innerHTML;
+          let wb = XLSX.utils.table_to_book(elt, { sheet: "sheet1" });
+          return dl
+            ? XLSX.write(wb, { bookType: type, bookSST: true, type: "base64" })
+            : XLSX.writeFile(wb, fn || name + (type || ".xlsx"));
+        }
+
+        function printpdf() {
+          let element = document.getElementById("statement");
+          let name = document.getElementById("name").innerHTML;
+
+          let options = {
+            jsPDF: {
+              format: "a4",
+            },
+            html2canvas: {
+              letterRendering: true,
+              useCORS: true,
+              logging: true,
+            },
+            margin: 1,
+            image: { type: "jpeg", quality: 1 },
+            filename: name + ".pdf",
+          };
+          html2pdf(element, options);
+        }
+      </script>
+    </div>
+  </div>
+</div>

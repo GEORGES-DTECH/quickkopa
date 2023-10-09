@@ -1,0 +1,412 @@
+{%extends 'base/index.html'%} 
+{% load static %} 
+{%load humanize%} 
+{%block content%}
+ {%include 'base/main-nav.html'%}
+<br />
+<br />
+<br />
+{%include 'transactions/forms/add-loan.html'%}
+ {%include 'transactions/forms/create-payment.html'%}
+  
+<div class="container main-container" id="loans-container">
+  <input
+    type="text"
+    id="search-input"
+    class="form-control search-card"
+    placeholder="Search client by id/phone/name......."
+    name="search"
+    hx-get="{%url 'search-loans'%}"
+    hx-trigger="keyup[delay:1000ms]"
+    hx-target="#data"
+    hx-indicator="#spinner"
+    autocomplete="off"
+  />
+  <hr style="height: 0.5px" />
+
+  <div
+    role="group"
+    aria-label="Basic outlined example"
+    hx-include="#checked-transactions"
+    hx-target="#data"
+  >
+    <button
+      type="button"
+      class="btn btn-primary btn-sm action-button"
+      _="on click remove .d-none from #addloan-form then add .d-none to #loans-container"
+      style="margin-right: 10px"
+    >
+      Add loan
+    </button>
+
+    <button
+      class="btn btn-outline-secondary shadow-none action-button btn-sm "
+      type="button"
+      _="on click remove .d-none from #create-payment then add .d-none to #loans-container"
+      style="margin-right: 15px"
+    >
+      Add payment
+    </button>
+   
+
+    <button
+      class="btn btn-outline-secondary shadow-none action-button btn-sm dropdown-toggle"
+      type="button"
+      id="dropdownMenuButton1"
+      data-bs-toggle="dropdown"
+      aria-expanded="false"
+      style="margin-right: 15px"
+    >
+      Actions
+    </button>
+    <ul class="dropdown-menu shadow" aria-labelledby="dropdownMenuButton1">
+      <li>
+        <a
+          class="dropdown-item px-2 links"
+          hx-get="{%url 'payments'%}"
+          hx-target="#container"
+          hx-push-url="true"
+          role="button"
+        
+          _="on click remove .d-none from #table-skeleton then add .d-none to .main-container"
+          >Manage Payments</a
+        >
+      </li>
+      <hr class="divider"/>
+      <li>
+        <a
+          class="dropdown-item links px-2"
+          hx-get="{%url 'clients'%}"
+          hx-target="#container"
+          hx-push-url="true"
+          role="button"
+          _="on click remove .d-none from #table-skeleton then add .d-none to .main-container"
+
+        
+          >Manage clients</a
+        >
+      </li>
+      
+     
+    </ul>
+  </div>
+  <div class="table-responsive" id="loans-div">
+    <form id="checked-transactions">
+      <table
+        class="table caption-top table-sm table-hover table-bordered main-table"
+        id="loans"
+      >
+        <caption class="caption">
+          <small
+            class="caption"
+          
+            hx-delete="{%url 'delete-loans'%}"
+            hx-target="#data"
+            hx-indicator="#spinner"
+            hx-confirm="Do you want to delete selected loans?"
+            role="button"
+            >Loans</small
+          >
+
+          <a
+            class="links shadow-none px-2 bi bi-list-task"
+            type="button"
+            id="dropdownMenuButton1"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+       
+          >
+            Tasks
+          </a>
+          <ul
+            class="dropdown-menu shadow"
+            aria-labelledby="dropdownMenuButton1"
+          >
+      
+            <li>
+              <a
+                class="dropdown-item px-2 bi bi-check links"
+                hx-put="{%url 'approve-loans'%}"
+                hx-target="#data"
+                hx-indicator="#spinner"
+              >
+                Approve checked
+              </a>
+            </li>
+            <hr class="divider" />
+            
+            <li>
+              <a
+                class="dropdown-item bi bi-check px-2 links"
+                hx-put="{%url 'disapprove-loans'%}"
+                hx-target="#data"
+                hx-indicator="#spinner"
+                role="button"
+                >Reject checked
+              </a>
+            </li>
+            <hr class="divider" />
+       
+            <li>
+              <a
+                class="dropdown-item px-2 bi bi-check links"
+                hx-put="{%url 'rollover-loans'%}"
+                hx-target="#data"
+                hx-indicator="#spinner"
+                role="button"
+                >Rollover checked
+              </a>
+            </li>
+            <hr class="divider" />
+            <li>
+              <a
+                class="dropdown-item px-2 bi bi-check text-center links"
+                hx-put="{%url 'clear-loans'%}"
+                hx-target="#data"
+                hx-indicator="#spinner"
+                role="button"
+                >Clear checked loans</a
+              >
+            </li>
+           
+          </ul>
+          <a
+          class="links shadow-none px-2 "
+          type="button"
+          id="dropdownMenuButton1"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+          
+        >
+          +Bulk tasks
+        </a>
+        <ul
+          class="dropdown-menu shadow"
+          aria-labelledby="dropdownMenuButton1"
+        >
+          <li>
+            <a
+              class="dropdown-item px-2 links"
+              hx-get="{%url 'bulk-create-loans'%}"
+              hx-target="#container"
+            hx-push-url="true"
+            hx-indicator="#spinner"
+
+              role="button"
+              >+Add loans</a
+            >
+          </li>
+          <hr class="divider" />
+         
+          <li>
+            <a
+              class="dropdown-item px-2 links"
+              hx-get="{%url 'bulk-create-payments'%}"
+              hx-target="#container"
+            hx-push-url="true"
+            hx-indicator="#spinner"
+              role="button"
+              >+Add payments</a
+            >
+          </li>
+          <hr class="divider" />
+          <li>
+            <a
+              class="dropdown-item px-2 links"
+              hx-get="{%url 'update-loans'%}"
+              hx-target="#data"
+              hx-indicator="#spinner"
+              role="button"
+              >Update loans</a
+            >
+          </li>
+          <hr class="divider" />
+          <li>
+            <a
+              class="dropdown-item bi bi-file-spreadsheet px-2 links"
+              onclick="ExportToExcel()"
+              role="button"
+              style="color: #355e3b"
+              >Export</a
+            >
+          </li>
+        
+        </ul>
+
+        <a
+        class="links  bi bi-file-earmark-spreadsheet "
+        type="button"
+        id="dropdownMenuButton1"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+        
+      >
+        Loans
+      </a>
+      <ul
+        class="dropdown-menu shadow"
+        aria-labelledby="dropdownMenuButton1"
+      >
+        <li>
+          <a
+            class="dropdown-item px-2 links"
+            hx-get="{%url 'weekly-todays-loans'%}"
+            hx-target="#container"
+            hx-push-url="true"
+             hx-indicator="#spinner"
+
+            role="button"
+            >Due today</a
+          >
+        </li>
+        <hr class="divider" />
+       
+        <li>
+          <a
+            class="dropdown-item px-2 links"
+            hx-get="{%url 'cleared-loans'%}"
+            hx-target="#container"
+          hx-push-url="true"
+          hx-indicator="#spinner"
+            role="button"
+            >Cleared loans</a
+          >
+        </li>
+        <hr class="divider" />
+       
+        <li>
+          <a
+            class="dropdown-item px-2 links"
+            hx-get="{%url 'overdue-loans'%}"
+            hx-target="#container"
+          hx-push-url="true"
+          hx-indicator="#spinner"
+            role="button"
+            >Overdue loans</a
+          >
+        </li>
+        <hr class="divider" />
+       
+        <li>
+          <a
+            class="dropdown-item px-2 links"
+            hx-get="{%url 'loans'%}"
+            hx-target="#container"
+          hx-push-url="true"
+          hx-indicator="#spinner"
+            role="button"
+            >Refresh loans</a
+          >
+        </li>
+      
+      </ul>
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col">
+              <input
+                type="checkbox"
+                class="form-check-input shadow-none"
+               
+                id="option{{loan.id}}"
+                value="{{loan.id}}"
+              />
+            </th>
+
+            <th scope="col">Staff</th>
+            <th scope="col">Released</th>
+            <th scope="col">Client</th>
+            <th scope="col">Payable</th>
+            <th scope="col">Paid</th>
+            <th scope="col">Outstanding</th>
+            <th scope="col">Installment</th>
+             <th scope="col">Aging</th>
+            <th scope="col">Status</th>
+          </tr>
+        </thead>
+        <tbody id="data">
+          {%include 'transactions/partials/loans-partial.html'%}
+        </tbody>
+      </table>
+    </form>
+    <nav aria-label="Page navigation example">
+      <ul class="pagination pagination-sm">
+        {%if loans.has_next%}
+
+        <li class="page-item">
+          <a
+            class="page-link links"
+            hx-get="?page={{loans.next_page_number}}"
+            hx-target="#container"
+            hx-push-url="true"
+          >
+            Next
+          </a>
+        </li>
+
+        {%endif%} 
+        {%if loans.has_previous%}
+        <li class="page-item">
+          <a
+            class="page-link links"
+            hx-get="{% url 'loans'%}"
+            hx-target="#container"
+            hx-push-url="true"
+            >First</a
+          >
+        </li>
+        <li class="page-item">
+          <a class="page-link links"
+            >{{loans.number}}/{{loans.paginator.num_pages}}</a
+          >
+        </li>
+
+        <li class="page-item">
+          <a
+            class="page-link links"
+            hx-get="?page={{loans.previous_page_number}}"
+            hx-target="#container"
+            hx-push-url="true"
+            preload
+            >Previous</a
+          >
+        </li>
+        {%endif%}
+      </ul>
+    </nav>
+  </div>
+ <hr style="height: 0.5px" />
+</div>
+{%include 'transactions/skeleton-loaders/html-table.html'%}
+{%include 'transactions/skeleton-loaders/list-group.html'%}
+
+  
+
+
+  <script type="text/javascript">
+    function ExportToExcel(type, fn, dl) {
+      var elt = document.getElementById("loans");
+      var wb = XLSX.utils.table_to_book(elt, {
+        sheet: "sheet1",
+      });
+
+      return dl
+        ? XLSX.write(wb, {
+            bookType: type,
+            bookSST: true,
+            type: "base64",
+          })
+        : XLSX.writeFile(wb, fn || "Loans" + (type || ".xlsx"));
+    }
+
+    $("#option{{loan.id}}").change(function () {
+      if ($(this).prop("checked")) {
+        $("input").prop("checked", true);
+      } else {
+        $("input").prop("checked", false);
+      }
+    });
+    $("#option{{loan.id}}").trigger("change");
+  </script>
+</div>
+{%endblock%}

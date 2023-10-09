@@ -1,0 +1,194 @@
+{%extends 'base/index.html'%}
+ {% load static %} 
+ {%load humanize%} 
+ {%block content%} 
+{%include 'base/main-nav.html'%}
+<br />
+<br />
+<br />
+<div class="container main-container">
+  <input
+    type="text"
+    id="search-input"
+    class="form-control search-card"
+    placeholder="Search by date/status/client......."
+    name="search"
+    hx-get="{%url 'search-message-loans'%}"
+    hx-trigger="keyup[delay:1000ms]"
+    hx-target="#data"
+    hx-indicator="#spinner"
+    autocomplete="off"
+  />
+  <hr style="height: 0.5px" />
+
+  <div
+    role="group"
+    aria-label="Basic outlined example"
+    hx-include="#checked-transactions"
+    hx-target="#data"
+  >
+    <button
+      class="btn btn-primary bi bi-send shadow-none action-button btn-sm dropdown-toggle"
+      type="button"
+      id="dropdownMenuButton1"
+      data-bs-toggle="dropdown"
+      aria-expanded="false"
+      style="margin-right: 25px"
+    >
+      Sms clients
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+      <li>
+        <a
+          class="dropdown-item bi bi-send links"
+          type="button"
+          style="font-size: 17px"
+          hx-get="{%url 'sms-overdue-loans'%}"
+          hx-target="#data"
+          hx-indicator="#spinner"
+          >Sms overdue</a
+        >
+      </li>
+      <hr class="divider" />
+      <li>
+        <a
+          class="dropdown-item bi bi-send links"
+          type="button"
+          style="font-size: 17px"
+          hx-get="{%url 'sms-due-today'%}"
+          hx-target="#data"
+          hx-indicator="#spinner"
+          >Sms due today</a
+        >
+      </li>
+      <hr class="divider" />
+      <li>
+        <a
+          class="dropdown-item bi bi-envelope links"
+          type="button"
+          style="font-size: 17px"
+          hx-get="{%url 'email-clients'%}"
+          hx-target="#data"
+          hx-indicator="#spinner"
+          >Email clients</a
+        >
+      </li>
+    </ul>
+
+    <button
+      class="btn btn-outline-secondary bi bi-send shadow-none action-button btn-sm"
+      type="submit"
+      hx-get="{%url 'create-message'%}"
+      role="button"
+      hx-push-url="true"
+      hx-target="#container"
+    >
+      Custome sms
+    </button>
+  </div>
+  <div class="table-responsive">
+    <form id="checked-transactions">
+      <table
+        class="table caption-top table-sm table-bordered table-hover bodystyle"
+      >
+        <caption class="caption">
+          <b class="caption" style="margin-right: 10px">Sms clients</b>
+          <b role="button" hx-get="{%url 'loans'%}" hx-target="#container"   _="on click remove .d-none from #table-skeleton then add .d-none to .main-container"
+          hx-push-url="true" class="bi bi-house links" style="margin-right: 10px">Home</b>
+
+          <a  onclick="location.reload()"
+          role="button"
+          class="bi bi-arrow-clockwise links"
+            >Refresh</a
+          >
+            
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col">
+              <input
+                type="checkbox"
+                class="form-check-input shadow-none"
+                name="ids"
+                id="option{{loan.id}}"
+                value="{{loan.id}}"
+              />
+            </th>
+            <th scope="col">Due</th>
+            <th scope="col">Client</th>
+            <th scope="col">Phone</th>
+            <th scope="col">Loan payable</th>
+            <th scope="col">Paid</th>
+            <th scope="col">Outstanding</th>
+            <th scope="col">Aging</th>
+            <th scope="col">Status</th>
+          </tr>
+        </thead>
+        <tbody id="data">
+          {%include 'sms_services/partials/loans-partial.html'%}
+        </tbody>
+      </table>
+    </form>
+    <nav aria-label="Page navigation example" class="parent-div">
+      <ul class="pagination pagination-sm">
+        {%if loans.has_next%}
+
+        <li class="page-item">
+          <a
+            class="page-link btn btn-outline-primary btn-sm"
+            hx-get="?page={{loans.next_page_number}}"
+            hx-target="#container"
+            hx-push-url="true"
+          >
+            Next
+          </a>
+        </li>
+
+        {%endif%} {%if loans.has_previous%}
+        <li class="page-item">
+          <a
+            class="page-link btn btn-outline-primary btn-sm"
+            hx-get="{% url 'sms-loans'%}"
+            hx-target="#container"
+            hx-push-url="true"
+            >First</a
+          >
+        </li>
+        <li class="page-item">
+          <a class="page-link links btn btn-outline-primary btn-sm"
+            >{{loans.number}}/{{loans.paginator.num_pages}}</a
+          >
+        </li>
+
+        <li class="page-item">
+          <a
+            class="page-link btn btn-outline-primary btn-sm"
+            hx-get="?page={{loans.previous_page_number}}"
+            hx-target="#container"
+            hx-push-url="true"
+            preload
+            >Previous</a
+          >
+        </li>
+        {%endif%}
+      </ul>
+    </nav>
+  </div>
+  <hr style="height: 0.5px" />
+</div>
+
+
+{%include 'transactions/skeleton-loaders/html-table.html'%}
+
+  <script type="text/javascript">
+    $("#option{{loan.id}}").change(function () {
+      if ($(this).prop("checked")) {
+        $("input").prop("checked", true);
+      } else {
+        $("input").prop("checked", false);
+      }
+    });
+    $("#option{{loan.id}}").trigger("change");
+  </script>
+
+  {%endblock%}

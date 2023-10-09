@@ -1,0 +1,151 @@
+{%extends 'base/index.html'%} 
+{%load static%}
+ {%load humanize%} 
+ {%load crispy_forms_tags%} 
+ {%block content%} 
+ {%include 'base/main-nav.html'%}
+<br />
+<br />
+<br />
+<div class="main-container">
+  
+
+  {%for loan in loans%}
+  <div
+    class="parent-div container mylist-group"
+    id="details"
+    x-data="{show: false}"
+  >
+    <ul class="list-group mylist-group shadow" x-data="{show: false}">
+      <li class="list-group-item text-center">
+        <h3 id="period">{% now "Y" %} BALANCE SHEET</h3>
+        <small
+          class="bi bi-file-earmark-pdf"
+          onclick="printpdf()"
+          role="button"
+          style="color: #800; float: left"
+          >Print report</small
+        >
+      
+      </li>
+
+      <li class="list-group-item fw-bold">
+        <small style="color: #366da5; font-size: large">Assets</small>
+    
+      </li>
+      <li class="list-group-item">
+        <div class="label">Cash and cash equivalents</div>
+
+        <div class="data">{{loan.cash_and_cash_equivalents|intcomma}}</div>
+      </li>
+
+      <li class="list-group-item">
+        <div class="label">Loans disbursed</div>
+
+        <div class="data">{{loan.loan_portfolio|intcomma}}</div>
+      </li>
+      <li class="list-group-item">
+        <div class="label">Plant,properties,equipments</div>
+
+        <div class="data">{{loan.ppe|intcomma}}</div>
+      </li>
+
+      <li class="list-group-item">
+        <div class="label fw-bold">Total assets</div>
+
+        <div class="data fw-bold">{{loan.total_assets|intcomma}}</div>
+      </li>
+
+      <li class="list-group-item fw-bold">
+        <small style="color: #366da5; font-size: large">Liabilities</small>
+      
+      </li>
+      <li class="list-group-item">
+        <div class="label">Long term loans</div>
+
+        <div class="data">{{loan.long_term_loans|intcomma}}</div>
+      </li>
+      <li class="list-group-item">
+        <div class="label">Accounts payable</div>
+
+        <div class="data">{{loan.accounts_payable|intcomma}}</div>
+      </li>
+      <li class="list-group-item">
+        <div class="label">Accrued expenses</div>
+
+        <div class="data">{{loan.accrued_expenses|intcomma}}</div>
+      </li>
+   
+      <li class="list-group-item">
+        <div class="label fw-bold">Total liabilities</div>
+
+        <div class="data fw-bold">{{loan.liabilities|intcomma}}</div>
+  
+      <li class="list-group-item fw-bold">
+        <small style="color: #366da5; font-size: large">Equity</small>
+      
+      </li>
+      <li class="list-group-item">
+        <div class="label">Owners equity</div>
+
+        <div class="data">{{loan.equity|intcomma}}</div>
+      </li>
+
+      <li class="list-group-item">
+        <div class="label fw-bold">Equity & liablities</div>
+
+       
+
+        <div class="data fw-bold">{{loan.equity_liabilities|intcomma}}</div>
+      </li>
+
+    
+
+      <li class="list-group-item">
+        <a
+          role="button"
+          hx-get="{%url 'loans'%}"
+          _="on click remove .d-none from #table-skeleton then add .d-none to .main-container"
+          hx-push-url="true"
+          hx-target="#container"
+          class="links bi bi-house shadow-none action-button"
+          style="margin-right: 60px"
+          >Home</a
+        >
+      
+        <a
+          role="button"
+          hx-get="{%url 'transact'%}"
+          hx-push-url="true"
+          hx-target="#container"
+          class="links bi bi-plus"
+          style="float: right"
+          >Transact</a
+        >
+      </li>
+    </ul>
+  </div>
+</div>
+
+{%endfor%} 
+{%include 'transactions/skeleton-loaders/html-table.html'%} 
+{%include 'transactions/skeleton-loaders/list-group.html'%}
+
+<script type="text/javascript">
+  function printpdf() {
+    let period = document.getElementById("period").innerHTML;
+
+    let element = document.getElementById("details");
+    let options = {
+      jsPDF: {
+        format: "a4",
+      },
+      html2canvas: { letterRendering: true, useCORS: true, logging: true },
+      margin: 1,
+      image: { type: "jpeg", quality: 1 },
+      filename: period + ".pdf",
+    };
+    html2pdf(element, options);
+  }
+</script>
+{%endblock content%}

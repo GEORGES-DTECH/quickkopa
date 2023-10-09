@@ -1,0 +1,21 @@
+{%load static%} 
+{%load humanize%} 
+{%for loan in loans%} 
+
+<tr>
+  <td>{{loan.lending_date|date:'j b,y'}}</td>
+
+  <td>{{loan.repayments|default_if_none:"0.00"}}</td>
+  <td>{{loan.penalties_payment|default_if_none:"0.00"}}</td>
+  <td>{{loan.rollover_interest_and_charges|default_if_none:"0.00"}}</td>
+
+  {%if forloop.first%}
+  <td>{{loan.annual_owner_capital_injection|default_if_none:"0.00"}}</td>
+  <td>{{loan.annual_loan_injection|default_if_none:"0.00"}}</td>
+  <td>{{loan.cash_at_beginning_of_the_period|default_if_none:"0.00"}}</td>
+
+  {%endif%}
+ 
+</tr>
+
+{%endfor%}

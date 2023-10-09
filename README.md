@@ -1,2 +1,0 @@
-# quickkopa
-microfinance sysytem

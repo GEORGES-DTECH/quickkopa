@@ -1,0 +1,135 @@
+{%extends 'base/index.html'%} 
+{%load static%}
+ {%load humanize%}
+  {%block content%} 
+  {%include 'base/main-nav.html'%}
+
+<br /><br /><br />
+
+<div class="container main-container">
+  <input
+    type="text"
+    class="form-control search-card"
+    placeholder="type to search...."
+    name="search"
+    hx-get="{%url 'report-search'%}"
+    hx-trigger="keyup[delay:1000ms]"
+    hx-target="#data"
+    hx-indicator="#spinner"
+    autocomplete="off"
+  />
+
+  <hr style="height: 0.5px" />
+
+
+  <div class="table-responsive">
+    <form id="checked-reports">
+      <table
+        class="table table-sm table-bordered table-hover caption-top main-table"
+      >
+        <caption class="caption">
+          <b class="caption" style="margin-right: 10px">Delivery </b>
+
+          <b
+            role="button"
+            hx-get="{%url 'messages'%}"
+            hx-target="#container"
+            _="on click remove .d-none from #table-skeleton then add .d-none to .main-container"
+            hx-push-url="true"
+            class="bi bi-chat-left-text links"
+            style="margin-right: 10px"
+            >Outbox</b
+          >
+
+        
+          <i class="bi bi-trash links"  
+          hx-delete="{%url 'delete-message-reports'%}"
+          hx-target="#container"
+          hx-indicator="#spinner"
+          hx-confirm="Are you sure you want to delete?" role="button">Delete</i>
+        </caption>
+
+        <thead>
+          <tr>
+            <th scope="col">
+              <input
+                type="checkbox"
+                class="form-check-input shadow-none"
+               
+                id="option{{report.id}}"
+                value="{{report.id}}"
+              />
+            </th>
+            <th scope="col">Date</th>
+            <th scope="col">Phone</th>
+            <th scope="col">Status</th>
+          </tr>
+        </thead>
+        <tbody id="data">
+          {%include 'sms_services/partials/reports-partial.html'%}
+        </tbody>
+      </table>
+    </form>
+    <nav aria-label="Page navigation example" class="parent-div">
+      <ul class="pagination pagination-sm">
+        {%if reports.has_next%}
+
+        <li class="page-item">
+          <a
+            class="page-link btn btn-outline-primary btn-sm"
+            hx-get="?page={{reports.next_page_number}}"
+            hx-target="#container"
+            hx-push-url="true"
+          >
+            Next
+          </a>
+        </li>
+
+        {%endif%} 
+        {%if reports.has_previous%}
+        <li class="page-item">
+          <a
+            class="page-link btn btn-outline-primary btn-sm"
+            hx-get="{% url 'reports-home'%}"
+            hx-target="#container"
+            hx-push-url="true"
+            >First</a
+          >
+        </li>
+        <li class="page-item">
+          <a class="page-link links btn btn-outline-primary btn-sm"
+            >{{reports.number}}/{{reports.paginator.num_pages}}</a
+          >
+        </li>
+
+        <li class="page-item">
+          <a
+            class="page-link btn btn-outline-primary btn-sm"
+            hx-get="?page={{reports.previous_page_number}}"
+            hx-target="#container"
+            hx-push-url="true"
+            preload
+            >Previous</a
+          >
+        </li>
+        {%endif%}
+      </ul>
+    </nav>
+  </div>
+
+  <hr class="divider" />
+</div>
+
+{%include 'transactions/skeleton-loaders/html-table.html'%} 
+{%include 'transactions/skeleton-loaders/list-group.html'%}
+<script type="text/javascript">
+  $("#option{{report.id}}").change(function () {
+    if ($(this).prop("checked")) {
+      $("input").prop("checked", true);
+    } else {
+      $("input").prop("checked", false);
+    }
+  });
+  $("#option{{report.id}}").trigger("change");
+</script>
+{%endblock%}

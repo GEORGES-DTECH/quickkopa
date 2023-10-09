@@ -1,0 +1,94 @@
+{%load humanize%}
+
+<div class="modal-content">
+  <div class="modal-header">
+    <h2 class="modal-title text-center" id="static" style="margin-right: 15px">
+      Incomes audit trail
+    </h2>
+ 
+    <a
+    class="bi bi-file-spreadsheet h5"
+    onclick="ExportToExcel()"
+    role="button"
+    style="color: #355e3b; margin-right: 10px"
+    >Excel Export</a
+  >
+    
+    <button
+      type="button"
+      class="btn-close shadow-none"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <div class="container">
+      <div class="table-responsive">
+        <table class="table table-sm table-bordered caption-top  table-hover" id="statement">
+            <caption>
+                <input
+                type="text"
+                id="search-input"
+                class="form-control search-card"
+                placeholder="Search by year eg 2021"
+                name="search"
+                hx-get="{%url 'income-audit-search'%}"
+                hx-trigger="keyup[delay:1000ms]"
+                style="background-color: #f8f8f8; border-color: #366da5; float: left;"
+                hx-target="#data"
+                hx-indicator="#spinner"
+                autocomplete="off"
+              />
+              <input
+              type="text"
+              id="search-input"
+              class="form-control search-card"
+              placeholder="Search by month/year eg 6/2021"
+              name="search"
+              hx-get="{%url 'income-audit-search'%}"
+              hx-trigger="keyup[delay:1000ms]"
+              style="background-color: #f8f8f8; border-color: #366da5; float: right;"
+              hx-target="#data"
+              hx-indicator="#spinner"
+              autocomplete="off"
+            />
+          
+            </caption>
+          <thead class="fw-bold" style="color: #366da5">
+            <tr>
+              <th scope="col">Date</th>
+              <th scope="col">Name</th>
+              <th scope="col">Loan</th>
+              <th scope="col">Rate</th>
+              <th scope="col">Interest</th>
+              <th scope="col">P.F(r=0.03)</th>
+          
+              <th scope="col">charges</th>
+              <th scope="col">Rollovers</th>
+              <th scope="col">Status</th>
+            </tr>
+          </thead>
+          <tbody id="data">
+            {%include 'transactions/partials/income-audit-partial.html'%}
+          
+             
+                  
+           
+          </tbody>
+        </table>
+      </div>
+       <script type="text/javascript">
+        function ExportToExcel(type, fn, dl) {
+          let elt = document.getElementById("statement");
+        
+          let wb = XLSX.utils.table_to_book(elt, { sheet: "sheet1" });
+          return dl
+            ? XLSX.write(wb, { bookType: type, bookSST: true, type: "base64" })
+            : XLSX.writeFile(wb, fn || "incomes audit" + (type || ".xlsx"));
+        }
+
+        
+      </script>
+    </div>
+  </div>
+</div>

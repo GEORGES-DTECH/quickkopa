@@ -1,0 +1,127 @@
+{%extends 'base/index.html'%} 
+{%load static%} 
+{%load humanize%} 
+{%load crispy_forms_tags%}
+{%block content%} 
+
+{%include 'base/main-nav.html'%}
+<br />
+<br />
+<br />
+
+<div class="container main-container">
+  <input
+    type="text"
+    class="form-control search-card"
+    placeholder="Search by phone/name.........."
+    name="search"
+    hx-get="{%url 'search-staff'%}"
+    hx-trigger="keyup delay:300ms"
+    hx-target="#data"
+    hx-indicator="#spinner"
+    autocomplete="off"
+  />
+
+  <hr />
+  <div class="table-responsive">
+    <form id="checked-transactions">
+      <table
+        class="table caption-top table-sm table-bordered table-hover main-table" id="content-div"
+  
+      >
+        <caption class="caption">
+          <small style="margin-right:15px" class="caption">Staffs</small>
+          
+          <a  hx-get="{%url 'create-staff'%}" hx-target="#container" hx-push-url="true" class="bi bi-plus links" style="margin-right:15px">Add staff</a>
+
+          <a role="button" hx-get="{%url 'loans'%}" hx-target="#container" _="on click remove .d-none from #table-skeleton then add .d-none to .main-container" hx-push-url="true" class="bi bi-house links">Home</a>
+
+          </caption>
+        <thead>
+          <tr>
+            <th scope="col">
+              <input
+                type="checkbox"
+                class="form-check-input"
+           
+                id="option{{staff.id}}"
+                value="{{staff.id}}"
+              />
+            </th>
+            <th scope="col">Name</th>
+          
+            <th scope="col">Contacts</th>
+            <th scope="col">Role</th>
+            <th scope="col">Role</th>
+            <th scope="col">Role</th>
+
+            <th scope="col">Edit</th>
+          </tr>
+        </thead>
+
+        <tbody id="data">
+         {%include 'accounts/partials/staff-partial.html'%}
+        </tbody>
+      </table>
+      <div class="parent-div">
+        <nav aria-label="Page navigation example">
+          <ul class="pagination pagination-sm">
+            {%if staffs.has_next%}
+
+            <li class="page-item">
+              <a
+                class="page-link links"
+                hx-get="?page={{staffs.next_page_number}}"
+                hx-target="#container"
+                hx-push-url="true"
+              >
+                Next
+              </a>
+            </li>
+            {%endif%} 
+            {%if staffs.has_previous%}
+            <li class="page-item">
+              <a
+                class="page-link links"
+                hx-get="{% url 'staffs'%}"
+                hx-target="#container"
+                hx-push-url="true"
+                >First</a
+              >
+            </li>
+
+            <li class="page-item">
+              <a
+                class="page-link links"
+                hx-get="?page={{staffs.previous_page_number}}"
+                hx-target="#container"
+                hx-push-url="true"
+                >Previous</a
+              >
+            </li>
+            {%endif%}
+          </ul>
+        </nav>
+      </div>
+    </form>
+  </div>
+  <hr />
+
+</div>
+{%include 'transactions/skeleton-loaders/html-table.html'%}
+{%include 'transactions/skeleton-loaders/list-group.html'%}
+
+
+<script>
+  
+$("#option{{staff.id}}").change(function () {
+  if ($(this).prop('checked')) {
+    $('input').prop('checked', true);
+  } else {
+    $('input').prop('checked', false);
+  }
+});
+$("#option{{staff.id}}").trigger('change');
+</script>
+
+{%endblock%}

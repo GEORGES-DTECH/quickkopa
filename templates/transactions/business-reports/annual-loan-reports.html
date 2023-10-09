@@ -1,0 +1,169 @@
+{%extends 'base/index.html'%} 
+{%load humanize%} 
+{%load crispy_forms_tags%}
+{%block content%}
+ {%include 'base/main-nav.html'%}
+<br />
+<br />
+<br />
+
+<div class="main-container">
+  <div class="parent-div container mylist-group py-2">
+    <ul class="list-group mylist-group shadow" x-data="{show: false}">
+      <li class="list-group-item">
+        <h6
+          style="color: #363636; cursor: pointer"
+          class="bi bi-search"
+          @click="show=!show"
+          x-text="show ? '..Close': '..Search' "
+          role="button"
+        ></h6>
+
+        <form
+          x-show="show"
+          hx-get="{%url 'annual-loan-reports'%}"
+          hx-target="body"
+          hx-indicator="#spinner"
+        >
+          {{report_filter.form|crispy}}
+          <br />
+          <div class="d-grid gap-2">
+            <button
+              class="btn btn-outline-primary action-button btn-sm shadow-none"
+            >
+              Search
+            </button>
+          </div>
+        </form>
+      </li>
+    </ul>
+  </div>
+
+  {%for loan in loans%}
+  <div class="parent-div container-fluid mylist-group" id="details">
+    <ul class="list-group mylist-group shadow" x-data="{show: false}">
+      <li class="list-group-item text-center">
+        <h4 id="period">{{loan.year}} ANNUAL REPORTS</h4>
+        <a
+          class="links bi bi-bar-chart-line"
+     
+          hx-get="{%url 'monthly-loan-reports'%}"
+          hx-target="#container"
+          hx-push-url="true"
+          _="on click remove .d-none from #card-skeleton then add .d-none to .main-container"
+
+          role="button"
+          preload
+          style="float: left;font-weight: 400;"
+
+        >
+          Monthly reports
+        </a>
+
+        <a
+        class="links bi bi-bar-chart-line"
+   
+        hx-get="{%url 'general-loan-reports'%}"
+        hx-target="#container"
+        hx-push-url="true"
+        _="on click remove .d-none from #card-skeleton then add .d-none to .main-container"
+
+        role="button"
+        preload
+        style="float: right;font-weight: 400;"
+
+      >
+        General reports
+      </a>
+
+       
+      </li>
+
+      <li class="list-group-item">
+        <div class="label">Total loans</div>
+
+        <div class="data">{{loan.total_annual_loans|intcomma}}</div>
+      </li>
+      <li class="list-group-item">
+        <div class="label">Total interest</div>
+
+        <div class="data">{{loan.total_annual_interest_charged|intcomma}}</div>
+      </li>
+      <li class="list-group-item">
+        <div class="label">Total payable(loans+interest)</div>
+
+        <div class="data">{{loan.total_annual_payable_loans|intcomma}}</div>
+      </li>
+      <li class="list-group-item">
+        <div class="label">Total repayments</div>
+
+        <div class="data">{{loan.total_annual_repayments|intcomma}}</div>
+      </li>
+      <li class="list-group-item">
+        <div class="label">Total outstandings</div>
+
+        <div class="data">{{loan.total_annual_outstandings|intcomma}}</div>
+      </li>
+      <li class="list-group-item">
+        <div class="label">Total arrears</div>
+
+        <div class="data">{{loan.total_annual_arrears|intcomma}}</div>
+      </li>
+    
+     
+      <li class="list-group-item">
+        <div class="label">Portfolio at risk</div>
+             
+       
+
+        <div class="data">{{loan.annual_portfolio_at_risk|intcomma}}</div>
+      </li>
+    
+      <li class="list-group-item">
+        <a
+        role="button"
+        hx-get="{%url 'loans'%}"
+        _="on click remove .d-none from #table-skeleton then add .d-none to .main-container"
+        hx-push-url="true"
+        hx-target="#container"
+        class="links bi bi-house shadow-none action-button"
+        >Home</a
+      >
+       
+        <a
+          class="bi bi-file-earmark-pdf"
+          onclick="printpdf()"
+          role="button"
+          style="color: #800; float: right"
+          >Print report</a
+        >
+      </li>
+    </ul>
+  </div>
+</div>
+
+
+
+{%endfor%} 
+{%include 'transactions/skeleton-loaders/html-table.html'%} 
+{%include 'transactions/skeleton-loaders/list-group.html'%}
+
+<script type="text/javascript">
+  function printpdf() {
+    let period = document.getElementById("period").innerHTML;
+
+    let element = document.getElementById("details");
+    let options = {
+      jsPDF: {
+        format: "a4",
+      },
+      html2canvas: { letterRendering: true, useCORS: true, logging: true },
+      margin: 1,
+      image: { type: "jpeg", quality: 1 },
+      filename: period + ".pdf",
+    };
+    html2pdf(element, options);
+  }
+</script>
+
+{%endblock%}

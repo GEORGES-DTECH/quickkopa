@@ -1,0 +1,434 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600&display=swap");
+
+* {
+  font-family: "Open Sans", sans-serif;
+  font-size: 16px;
+}
+
+:root {
+  --primary: #366da5;
+  --white: #fefefe;
+  ---success: #355e3b;
+
+  --text-color: #222222;
+  --grey-text-color: #444444;
+  --red-color: #800;
+  --background: #d6d6d6;
+  --table-border-bottom: #ededed;
+}
+
+.parent-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+body {
+  background-color: var(--background);
+}
+body::-webkit-scrollbar {
+  width: 0 !important;
+}
+
+.modal-body::-webkit-scrollbar {
+  width: 0 !important;
+}
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--primary);
+  font-weight: 400;
+}
+/* ===================navbar============================ */
+
+.navbar-dark {
+  background-color: var(--primary);
+}
+
+.custom-toggler {
+  border-color: var(--white);
+}
+
+.navbar-landing {
+  background-color: var(--primary);
+}
+
+.nav-link {
+  font-weight: 500 !important;
+  font-size: 16.5px !important;
+}
+.dropdown-menu {
+  border-color: var(--grey-text-color) !important;
+}
+
+/* -=====================table stylings==================== */
+hr.divider {
+  margin: 0.1em;
+  height: 0.1px;
+  color: var(--grey-text-color);
+}
+.divider {
+  height: 0.5px;
+}
+
+.main-table thead tr {
+  background-color: var(--primary);
+  color: var(--white);
+  font-weight: 600;
+  font-size: 16px;
+  position: sticky;
+  top: 0;
+}
+
+.main-table tbody tr {
+  background-color: var(--white);
+  color: var(--text-color);
+  font-weight: 400;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.caption {
+  font-weight: 600;
+  font-size: 18px;
+  color: var(--text-color);
+}
+.caption:hover {
+  background-color: var(--background);
+  color: var(--text-color);
+}
+
+/* ============card stylings======================= */
+
+.search-card {
+  background: var(--white);
+  height: 41px;
+  border-color: var(--white);
+}
+.search-card > .myinput {
+  border-radius: 0.5rem;
+}
+
+.list-group,
+.list-group-item {
+  background: var(--white);
+  color: var(--text-color);
+  font-weight: 400;
+  font-size: 16px;
+}
+
+.mylist-group > .list-group {
+  border-radius: 0.9rem;
+}
+.bulk-forms > .list-group {
+  border-radius: 0.9rem;
+}
+.label {
+  float: left;
+  color: var(--text-color);
+  font-weight: 400;
+  font-size: 16px;
+}
+
+.data {
+  float: right;
+  color: var(--text-color);
+  font-weight: 400;
+  font-size: 16px;
+}
+
+/* ========================buttons==================================== */
+.btn-primary {
+  font-weight: 600 !important;
+
+  border-color: var(--primary);
+  background: var(--primary);
+  color: var(--white);
+}
+
+.btn-primary:hover {
+  border-color: var(--primary) !important;
+  background: var(--primary) !important;
+  color: var(--white);
+  box-shadow: none !important;
+}
+
+.btn-primary:active {
+  border-color: var(--primary) !important;
+  background: var(--primary) !important;
+  color: var(--white);
+  box-shadow: none !important;
+}
+
+.btn-primary:focus {
+  border-color: var(--primary) !important;
+  background: var(--primary) !important;
+  color: var(--white);
+  box-shadow: none !important;
+}
+
+.btn-outline-secondary {
+  color: var(--grey-text-color) !important;
+  font-weight: 500 !important;
+  border-color: var(--grey-text-color) !important;
+}
+
+.btn-outline-secondary:hover {
+  background-color: var(--grey-text-color) !important;
+  border-color: var(--grey-text-color) !important;
+  color: var(--white) !important;
+}
+
+.btn-outline-secondary:focus {
+  background-color: var(--grey-text-color) !important;
+  border-color: var(--grey-text-color) !important;
+  color: var(--white) !important;
+}
+
+.btn-outline-secondary:active {
+  background-color: var(--grey-text-color) !important;
+  border-color: var(--grey-text-color) !important;
+  color: var(--white) !important;
+}
+
+.action-button {
+  border-radius: 5px;
+}
+
+/* ===================links========================= */
+a {
+  text-decoration: none;
+  color: var(--text-color);
+  cursor: pointer;
+}
+
+.links {
+  text-decoration: none;
+  color: var(--text-color);
+  font-weight: 500;
+  font-size: 15.5px;
+  margin: 0;
+}
+.links:hover {
+  color: var(--text-color);
+  background-color: var(--white);
+  border-radius: 5px;
+}
+
+.links:active {
+  color: var(--text-color);
+  background-color: var(--white);
+  border-radius: 5px;
+}
+
+.links:focus {
+  color: var(--text-color);
+  background-color: var(--white);
+  border-radius: 5px;
+}
+
+.page-item {
+  border-radius: 5px;
+}
+/* ====================form inputs============================ */
+
+.select2 {
+  width: 100% !important;
+}
+
+.form-control:focus {
+  color: var(--text-color) !important;
+  background-color: var(--white) !important;
+  border-color: var(--text-color) !important;
+}
+
+.form-control:focus {
+  border-color: var(--primary) !important;
+  -webkit-box-shadow: none !important;
+  -moz-box-shadow: none !important;
+  box-shadow: none !important;
+  border-width: 1.2px !important;
+}
+
+.form-control {
+  border-radius: 5px;
+  border-width: 1.2px !important;
+}
+.form-check-input {
+  box-shadow: none !important;
+  width: 22px;
+  color: var(--grey-text-color) !important;
+}
+
+/* =============spinner============== */
+
+.spinner {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-left: -50px;
+  margin-top: -50px;
+  color: var(--primary);
+  width: 50px;
+  height: 50px;
+}
+
+.toast-body {
+  background: var(---success);
+  color: var(--white);
+  font-size: large;
+}
+
+.modal-backdrop {
+  opacity: 0.8 !important;
+}
+
+/* ==================media queries========================================= */
+
+@media screen and (max-width: 700px) {
+  .main-table thead {
+    border: none;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+  }
+  .main-table {
+    border: var(--background);
+  }
+
+  tr {
+    border-radius: 0.6rem;
+  }
+
+  .main-table tr {
+    border-bottom: 2.5px solid var(--primary);
+    display: block;
+    margin-bottom: 0.625em;
+  }
+
+  .main-table td {
+    border-bottom: 1px solid var(--table-border-bottom);
+
+    display: block;
+    font-size: 16px;
+    text-align: right;
+  }
+
+  .main-table td:before {
+    content: attr(data-label);
+    float: left;
+  }
+
+  .main-table td:last-child {
+    border-bottom: 0;
+  }
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (max-width: 600px) {
+  .search-card {
+    width: 98%;
+  }
+  .list-group {
+    width: 100%;
+  }
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 600px) {
+  .search-card {
+    width: 98%;
+  }
+  .mylist-group {
+    width: 100%;
+  }
+  .search-box {
+    width: 100%;
+  }
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+  .search-card {
+    width: 97%;
+  }
+  .mylist-group {
+    width: 100%;
+  }
+
+  /* Large devices (laptops/desktops, 992px and up) */
+  @media only screen and (min-width: 992px) {
+    .mylist-group {
+      width: 38rem;
+    }
+
+    .search-card {
+      width: 20rem;
+    }
+  }
+
+  table {
+    border-radius: 5px;
+    overflow: hidden;
+  }
+
+  thead th:first-child {
+    border-top-left-radius: 5px;
+    border-left: 2px solid var(--background);
+  }
+
+  thead th:last-child {
+    border-top-right-radius: 5px;
+    border-right: 2px solid var(--background);
+  }
+
+  tbody tr:last-child :first-child {
+    border-bottom-left-radius: 5px;
+  }
+
+  tbody tr:last-child :last-child {
+    border-bottom-right-radius: 5px;
+  }
+
+  /* Extra large devices (large laptops and desktops, 1200px and up) */
+
+  @media only screen and (min-width: 1200px) {
+    .mylist-group {
+      width: 38rem;
+    }
+
+    .search-card {
+      width: 24rem;
+    }
+  }
+}
+
+.dropdown:hover .dropdown-menu {
+  display: block !important;
+  margin-top: 0; /* remove the gap so it doesn't close */
+}
+.container.htmx-added {
+  opacity: 0;
+}
+.container {
+  opacity: 1;
+  transition: opacity 1s ease-out;
+}
+
+.main-container.htmx-added {
+  opacity: 0;
+}
+.main-container {
+  opacity: 1;
+  transition: opacity 1s ease-out;
+}
+
+.form-text {
+  color: #800 !important;
+  font-size: smaller;
+}

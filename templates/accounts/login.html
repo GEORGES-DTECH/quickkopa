@@ -1,0 +1,137 @@
+{%extends 'base/index.html'%} 
+{%load static%} 
+{%load crispy_forms_tags%} 
+{%block content%} 
+{%include 'base/nav.html'%}
+
+<br />
+<br />
+<br>
+
+<div class="container py-4 mylist-group">
+  <ul class="list-group mylist-group  shadow">
+    <li class="list-group-item">
+      <h2 class="text-center bi bi-box-arrow-in-right">Login</h2>
+    </li>
+
+    <li class="list-group-item">
+      <form method="POST" enctype="multipart/form-data">
+        {%csrf_token%} 
+        {{form|crispy}}
+        <br />
+        <small
+          style="cursor: pointer; float: right; color: #366da5"
+          id="toggleLogin"
+          class="fw-bold"
+          role="button"
+          onclick="Handlelogin()"
+          >Show password</small
+        >
+        <br /><br />
+        <div class="d-grid gap-2">
+          <button
+            class="btn btn-primary shadow-none save-btn"
+            hx-post="{%url 'login'%}"
+            hx-target="#container"
+            hx-push-url="true"
+            type="submit"
+          >
+            Login
+          </button>
+        </div>
+      </form>
+    </li>
+
+    <li class="list-group-item">
+    
+      <small class="text-muted">
+        <a
+          class="ml-2 links"
+          hx-get="{%url 'password_reset'%}"
+          hx-target="#container"
+          hx-push-url="true"
+          style="font-size: small;"
+          >Forgot password?</a
+        >
+        , Need an account?
+        <a
+          class="ml-2 links"
+          hx-get="{%url 'signup'%}"
+          hx-target="#container"
+          hx-push-url="true"
+          style="font-size: small;"
+          >Register</a
+
+        > 
+      </small>
+    </li>
+  </ul>
+</div>
+<div class="container mylist-group">
+  <ul class="list-group mylist-group  shadow">
+    <li class="list-group-item" role="button" onclick="location.reload()">
+      <i class="bi bi-arrow-repeat " >Installation,Refresh then</i>
+    </li>
+    <li class="list-group-item" role="button" id="installApp">
+      
+      <a class="bi bi-windows h3 links"  style="font-size: larger;">Install on pc ,use chrome/edge</a>
+      
+      
+    </li>
+  
+    <li class="list-group-item">
+    
+      <a class="bi bi-app h3 links" role="button" href="https://play.google.com/store/apps/details?id=com.repotranstech.manipap.twa" style="font-size: larger;">Install app</a>
+      
+    </li>
+    <li class="list-group-item">
+      <a style="font-size: small;" class="text-muted">Software by Repotrans tech solutions(0727574812)</a> 
+    
+    </li>
+
+</div>
+
+<script>
+  {
+  function Handlelogin() {
+    const togglelogin = document.getElementById("toggleLogin");
+    const password = document.getElementById("id_password");
+    if (togglelogin.innerText === "Show password") {
+      togglelogin.innerText = "Hide password ";
+
+      password.setAttribute("type", "text");
+    } else {
+      togglelogin.innerText = "Show password";
+
+      password.setAttribute("type", "password");
+    }
+  }
+}
+
+{
+
+
+ let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+
+    deferredPrompt = e;
+
+});
+
+
+const installApp = document.getElementById('installApp');
+
+installApp.addEventListener('click', async () => {
+    if (deferredPrompt !== null) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+            deferredPrompt = null;
+        }
+    }
+});
+}
+</script>
+
+{%endblock content%}

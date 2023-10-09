@@ -1,0 +1,147 @@
+{%load humanize%}
+
+<div class="modal-content" style="background-color: #fefefe;" id="details">
+  <div class="modal-header">
+    <h2 class="modal-title bi bi-person" id="staticBackdropLabel" style="margin-right: 15px;">
+      Loan details
+    </h2>
+    <a class=" bi bi-file-earmark-pdf" onclick="printpdf()" role="button" style="color: #800; margin-right: 10px;">Print details</a>
+    <button
+      type="button"
+      class="btn-close shadow-none"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+    ></button>
+  </div>
+<div class="modal-body" >
+
+  <ul class="list-group list-group-flush" >
+
+  <li class="list-group-item" >
+    <div class="label">Name</div>
+        
+    <div class="data">{{loan.client.full_name}}</div>
+
+  </li>
+  <li class="list-group-item">
+    <div class="label">Phone</div>
+        
+    <div class="data">{{loan.client.phone1}}</div>
+
+  </li>
+ 
+  <li class="list-group-item">
+    <div class="label">Business</div>
+        
+    <div class="data">{{loan.client.employer_or_business_type}} </div>
+
+  </li>
+  <li class="list-group-item">
+    <div class="label">Location</div>
+        
+    <div class="data">{{loan.client.location}} </div>
+
+  </li>
+  <li class="list-group-item">
+    <div class="label">Id number</div>
+        
+    <div class="data">{{loan.client.id_number}}</div>
+
+  </li>
+  <li class="list-group-item">
+    <div class="label">Lending date</div>
+        
+    <div class="data">{{loan.lending_date|date:'j b,y'}}</div>
+
+  </li>
+  <li class="list-group-item">
+    <div class="label">Due date</div>
+        
+    <div class="data">{{loan.due_date|date:'j b,y'}}</div>
+
+  </li>
+ 
+  <li class="list-group-item">
+    <div class="label">Loan amount</div>
+        
+    <div class="data">{{loan.loan_amount|intcomma}}</div>
+
+  </li>
+ 
+  <li class="list-group-item">
+    <div class="label">Interest</div>
+        
+    <div class="data">{{loan.interest_charged|intcomma}}</div>
+
+  </li>
+  <li class="list-group-item">
+    <div class="label">Payable</div>
+        
+    <div class="data">{{loan.payable_amount|intcomma}}</div>
+
+  </li>
+  <li class="list-group-item">
+    <div class="label">Paid</div>
+        
+    <div class="data">{{loan.repayments|intcomma}}</div>
+
+  </li>
+  <li class="list-group-item">
+    <div class="label">Outstanding</div>
+        
+    <div class="data">{{loan.outstanding_loan|intcomma}}</div>
+
+  </li>
+  <li class="list-group-item">
+    <div class="label">Installment</div>
+        
+    <div class="data">{{loan.installment|intcomma}}</div>
+
+  </li>
+  <li class="list-group-item">
+    <div class="label">Processing fee</div>
+        
+    <div class="data">{{loan.processing_fee|intcomma}}</div>
+
+  </li>
+  <li class="list-group-item">
+    <div class="label">Registration</div>
+        
+    <div class="data">{{loan.registration|intcomma}}</div>
+
+  </li>
+  
+  <li class="list-group-item">
+    <div class="label">Payment shedule</div>
+        
+    <div class="data">{{loan.payment_plan}}</div>
+
+  </li>
+ <li class="list-group-item">
+    <div class="label">Added by</div>
+        
+    <div class="data">{{loan.staff.first_name}} {{loan.staff.last_name}}</div>
+
+  </li>
+</ul>
+</div>
+
+<script type="text/javascript">
+  
+
+        
+    function printpdf(){
+      let full_name = "{{loan.client.full_name}}"
+      let element = document.getElementById('details');
+      let options = {
+      jsPDF: {
+      format: 'a4'
+      },
+      html2canvas:  {letterRendering: true, useCORS: true,     logging: true},
+      margin: 1,
+      image: {type: 'jpeg', quality: 1},
+      filename: full_name+'.pdf'
+    };
+    html2pdf(element, options);
+  }
+</script>

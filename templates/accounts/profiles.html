@@ -1,0 +1,64 @@
+{%extends 'base/index.html'%}
+ {%load crispy_forms_tags%}
+  {%load static%} 
+  {%block content%} 
+  {%include 'base/main-nav.html'%}
+
+<br />
+<br />
+<br />
+{%for profile in profiles%}
+{%if profile.username == user.username%}
+<div class="container mylist-group" id="content-div">
+    <ul class="list-group mylist-group shadow">
+      <li class="list-group-item">
+        <h2 class="text-center bi bi-person-fill">Profile</h2>
+      </li>
+      <li class="list-group-item">
+        <div class="label">
+         Phone
+        </div>
+        <div class="data">
+          {{profile.username}}
+        </div>
+      </li>
+      <li class="list-group-item">
+        <div class="label">
+          First name
+         </div>
+         <div class="data">
+           {{profile.first_name}}
+         </div>
+      </li>
+      <li class="list-group-item">
+        <div class="label">
+          Last name
+         </div>
+         <div class="data">
+           {{profile.last_name}}
+         </div>
+      </li>
+      <li class="list-group-item">
+        <div class="label">
+          Email
+         </div>
+         <div class="data">
+           {{profile.email}}
+         </div>
+      </li>
+  
+  
+      <li class="list-group-item">
+       
+      
+       <button class="btn btn-outline-secondary btn-sm action-button shadow-none" 
+       hx-get="{%url 'edit-profile' profile.id%}" hx-target="#container" hx-push-url="true" style="margin-right: 20px;">Edit profile</button>
+    
+  
+       <button class="btn btn-outline-secondary btn-sm action-button shadow-none float-end" hx-get="{%url 'change-password'%}" hx-target="#container" hx-push-url="true" style="float: right;">Change password</button>
+      </li>
+    </ul>
+</div>
+{%endif%}
+{%endfor%}
+{%endblock%}

@@ -1,0 +1,73 @@
+{%include 'base/main-nav.html'%}
+
+{%load crispy_forms_tags%}
+
+<div class="parent-div container-fluid mylist-group {%if not form.errors%} d-none{%endif%}" id="client-form">
+  <ul class="list-group mylist-group shadow">
+    <li class="list-group-item">
+      <h2 class="text-center">Add client</h2>
+    </li>
+
+    <li class="list-group-item">
+      <form
+        method="POST"
+        hx-encoding="multipart/form-data"
+        autocomplete="off"
+        type="submit"
+        hx-post="{%url 'create-client'%}"
+        hx-target="#container"
+        hx-push-url="true"
+        
+      >
+        {%csrf_token%} 
+        {{form|crispy}}
+         {{form.media}}
+        <br />
+        <div class="d-grid gap-2">
+          <button class="btn btn-primary shadow-none save-btn">Submit</button>
+          <br />
+
+          <button
+            type="button"
+            class="btn btn-outline-secondary shadow-none"
+            _="on click remove .d-none from #clients-container then add .d-none to #client-form"
+          >
+            Close
+          </button>
+        
+        </div>
+      </form>
+    </li>
+  </ul>
+</div>
+<script>
+
+
+
+function Employment() {
+  
+  let business_div = document.getElementById('div_id_business_type')
+  let employer = document.getElementById('div_id_employer')
+  let employers_phone = document.getElementById('div_id_employers_phone')
+  let job = document.getElementById('div_id_job_title')
+  let status = document.getElementById('id_job_status')
+ 
+  if(status.value === 'employed'){
+     business_div.hidden =true
+     employer.hidden = false
+    employers_phone.hidden =false
+    job.hidden =false
+  }
+  if(status.value === "self employed"){
+    employer.hidden = true
+    employers_phone.hidden =true
+    job.hidden =true
+    business_div.hidden =false
+
+  }
+  
+  }
+  let  job_status = document.getElementById('id_job_status').addEventListener('change',Employment)
+  
+
+</script>

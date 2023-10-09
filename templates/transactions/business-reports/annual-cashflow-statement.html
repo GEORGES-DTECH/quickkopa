@@ -1,0 +1,234 @@
+{%extends 'base/index.html'%} 
+{%load static%} 
+{%load humanize%} 
+{%load crispy_forms_tags%} 
+{%block content%} 
+{%include 'base/main-nav.html'%}
+
+<br />
+<br />
+<br />
+<div class="main-container">
+  <div class="parent-div container py-2 mylist-group">
+    <ul class="list-group mylist-group shadow" x-data="{show: false}">
+      <li class="list-group-item">
+        <h6
+          style="color: #363636; cursor: pointer"
+          class="bi bi-search"
+          @click="show=!show"
+          x-text="show ? '..Close': '..Search' "
+          role="button"
+        ></h6>
+
+        <form
+          x-show="show"
+          hx-get="{%url 'annual-cashflow-statement'%}"
+          hx-target="body"
+          hx-indicator="#spinner"
+        >
+          {{report_filter.form|crispy}}
+          <br />
+          <div class="d-grid gap-2">
+            <button
+              class="btn btn-outline-primary action-button btn-sm shadow-none"
+            >
+              Search
+            </button>
+          </div>
+        </form>
+      </li>
+    </ul>
+  </div>
+
+  {%for report in reports%}
+  <div
+    class="parent-div container mylist-group"
+    id="details"
+    x-data="{show: false}"
+  >
+    <ul class="list-group mylist-group shadow">
+      <li class="list-group-item text-center">
+        <h3 id="period">{{report.year}} CASH FLOWS</h3>
+        <small
+          class="bi bi-file-earmark-pdf"
+          onclick="printpdf()"
+          role="button"
+          style="color: #800"
+          >Print report</small
+        >
+      </li>
+
+      <li class="list-group-item">
+        <small style="color: #366da5; font-size: large"
+          >Cashflow from operations</small
+        >
+        <a
+        class="bi bi-three-dots-vertical text-center px-4 links" style="float: right;"
+        @click="show=!show" x-text = "show ? 'Hide': 'More' "
+        ><small></small></a
+      >
+      </li>
+      <li class="list-group-item">
+        <div class="label">Cash at the beginning</div>
+
+        <div class="data">
+          {{report.cash_at_beginning_of_the_period|intcomma}}
+        </div>
+      </li>
+      
+      <li class="list-group-item">
+        <div class="label">Loan repayments</div>
+
+        <div class="data">{{report.total_annual_payments|intcomma}}</div>
+      </li>
+      <li class="list-group-item">
+        <div class="label">Rollovers & charges</div>
+
+        <div class="data">{{report.total_annual_charges_and_rollovers|intcomma}}</div>
+      </li>
+      <li class="list-group-item" x-show="show">
+        <div class="label">Penalties repayments</div>
+
+        <div class="data">{{report.annual_penalties|intcomma}}</div>
+      </li>
+    
+      <li class="list-group-item" x-show="show">
+        <div class="label">Expenses</div>
+
+        <div class="data">({{report.annual_expenses|intcomma}})</div>
+      </li>
+
+      <li class="list-group-item">
+        <div class="label">Loan disbursements</div>
+
+        <div class="data">({{report.annual_disbursements|intcomma}})</div>
+      </li>
+
+      <li class="list-group-item">
+        <div class="label fw-bold">Net cashflow from operations</div>
+
+        <div class="data fw-bold">
+          {{report.net_cashflow_from_operations|intcomma}}
+        </div>
+      </li>
+
+      <li class="list-group-item">
+        <small style="color: #366da5; font-size: large"
+          >Cashflow from financing</small
+        >
+      </li>
+      <li class="list-group-item">
+        <div class="label">Loan financing</div>
+
+        <div class="data">{{report.annual_loan_injection|intcomma}}</div>
+      </li>
+      <li class="list-group-item" x-show="show">
+        <div class="label">Owners capital</div>
+
+        <div class="data">{{report.annual_owner_capital_injection|intcomma}}</div>
+      </li>
+      <li class="list-group-item" x-show="show">
+        <div class="label">Owners Withdraws</div>
+
+        <div class="data">({{report.annual_drawings|intcomma}})</div>
+      </li>
+
+      <li class="list-group-item">
+        <div class="label fw-bold">Net cashflow from financing</div>
+
+        <div class="data fw-bold">
+          {{report.net_cashflow_from_financing|intcomma}}
+        </div>
+      </li>
+
+      <li class="list-group-item">
+        <div class="label fw-bold" style="color: #366da5; font-size: large">
+          Cash at the end
+        </div>
+
+        <div class="data fw-bold" style="color: #366da5; font-size: large">
+          {{report.cash_balance|intcomma}}
+        </div>
+      </li>
+      <li class="list-group-item">
+        <a  class="bi bi-eye links"   class="dropdown-item links bi bi-file-spreadsheet"
+        hx-get="{%url 'cashin-audit'%}"
+        hx-target="#st-dialog"
+        preload
+        data-bs-toggle="modal"
+        data-bs-target="#static">Cashin audit trail</a>
+        
+        <a  class="bi bi-eye links"   class="dropdown-item links bi bi-file-spreadsheet"
+        hx-get="{%url 'cashout-audit'%}"
+        hx-target="#st-dialog"
+        preload
+        data-bs-toggle="modal"
+        style="float:right"
+        data-bs-target="#static">Cashout audit trail</a>
+       
+      </li>
+     
+
+      <!-- <li
+        class="list-group-item"
+        x-show="show"
+        style=" height: 40vh; "
+      >
+        <canvas id="myChart" ></canvas>
+      </li> -->
+
+      <li class="list-group-item">
+        <a
+          role="button"
+          hx-get="{%url 'loans'%}"
+          _="on click remove .d-none from #table-skeleton then add .d-none to .main-container"
+          hx-push-url="true"
+          hx-target="#container"
+          class="links bi bi-house shadow-none action-button"
+          style="margin-right: 20px"
+          >Home</a
+        >
+        <a
+          role="button"
+          hx-get="{%url 'cashflow-transactions'%}"
+          hx-target="#st-dialog"
+          preload
+          data-bs-toggle="modal"
+          data-bs-target="#static"
+          class="bi bi-eye links"
+          >View transactions</a
+        >
+        <a
+          role="button"
+          hx-get="{%url 'transact'%}"
+          hx-push-url="true"
+          hx-target="#container"
+          class="links bi bi-plus"
+          style="float: right"
+          >Transact</a
+        >
+      </li>
+    </ul>
+  </div>
+</div>
+{%endfor%} 
+{%include 'transactions/skeleton-loaders/html-table.html'%} 
+{%include 'transactions/skeleton-loaders/list-group.html'%}
+<script type="text/javascript">
+  function printpdf() {
+    let period = document.getElementById("period").innerHTML;
+
+    let element = document.getElementById("details");
+    let options = {
+      jsPDF: {
+        format: "a4",
+      },
+      html2canvas: { letterRendering: true, useCORS: true, logging: true },
+      margin: 1,
+      image: { type: "jpeg", quality: 1 },
+      filename: period + ".pdf",
+    };
+    html2pdf(element, options);
+  }
+</script>
+{%endblock content%}

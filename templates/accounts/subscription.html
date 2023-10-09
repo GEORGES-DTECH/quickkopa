@@ -1,0 +1,72 @@
+
+{%extends 'base/index.html'%}
+ {%load static%} 
+ {%load humanize%} 
+ {%load crispy_forms_tags%} 
+ {%block content%} 
+ {%include 'base/main-nav.html'%}
+
+<br />
+<br />
+<br />
+<div class="main-container">
+
+
+<div class="parent-div container mylist-group">
+            
+  <ul class="list-group mylist-group  shadow">
+    
+      <li class="list-group-item text-center">
+       <h2>Payment methods</h2>
+      
+     
+      </li>
+  
+       
+      <li class="list-group-item" >
+        <div class="label" style="font-size: large;">Mpesa Till </div>
+      
+        <div class="data" style="font-size: large;">9360751</div>
+      </li>
+     
+      
+      <li class="list-group-item">
+        <div class="label" style="font-size: large;">Mpesa paybill </div>
+      
+        <div class="data" style="font-size: large;">4085305,account(business name)</div>
+
+       
+       
+      </li>
+   
+   
+      <li class="list-group-item">
+        <div class="label" style="font-size: large;">Equity account </div>
+      
+        <div class="data" style="font-size: large;">0340181298577</div>
+      </li>
+    
+    <li class="list-group-item">
+      <a
+      role="button"
+      hx-get="{%url 'loans'%}"
+      _="on click remove .d-none from #table-skeleton then add .d-none to .main-container"
+
+      hx-push-url="true"
+      hx-target="#container"
+      class="links btn-sm bi bi-house links"
+      style="margin-right: 10px;"
+      >Home</a
+    >
+ 
+  </ul>
+</div>   
+
+
+
+
+</div>
+{%include 'transactions/skeleton-loaders/html-table.html'%}
+{%include 'transactions/skeleton-loaders/list-group.html'%}
+
+{%endblock content%}

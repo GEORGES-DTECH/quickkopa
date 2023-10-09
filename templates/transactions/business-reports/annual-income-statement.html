@@ -1,0 +1,177 @@
+{%extends 'base/index.html'%}
+ {%load static%} 
+ {%load humanize%}
+  {%load crispy_forms_tags%}
+   {%block content%} 
+   {%include 'base/main-nav.html'%}
+
+<br />
+<br />
+<br />
+<div class="main-container">
+  <div class="parent-div container py-2 mylist-group">
+    <ul class="list-group mylist-group shadow" x-data="{show: false}">
+      <li class="list-group-item">
+        <h6
+          style="color: #363636; cursor: pointer"
+          class="bi bi-search"
+          @click="show=!show"
+          x-text="show ? '..Close': '..Search' "
+          role="button"
+        ></h6>
+
+        <form
+          x-show="show"
+          hx-get="{%url 'annual-income-statement'%}"
+          hx-target="body"
+          hx-indicator="#spinner"
+        >
+          {{report_filter.form|crispy}}
+          <br />
+          <div class="d-grid gap-2">
+            <button
+              class="btn btn-outline-primary action-button btn-sm shadow-none"
+            >
+              Search
+            </button>
+          </div>
+        </form>
+      </li>
+    </ul>
+  </div>
+
+  {%for report in reports%}
+  <div class="parent-div container-fluid mylist-group" id="details">
+    <ul class="list-group mylist-group shadow" x-data="{show: false}">
+      <li class="list-group-item text-center">
+        <h3 id="period">{{report.year}} ANNUAL INCOME STATEMENT</h3>
+        <a
+          hx-get="{%url 'monthly-income-statement'%}"
+          hx-push-url="true"
+          hx-target="#container"
+          _="on click remove .d-none from #card-skeleton then add .d-none to .main-container"
+          class="links bi bi-bar-chart-line"
+          >Monthly income statement</a
+        >
+      </li>
+      <li class="list-group-item">
+        <div class="label" >Interest income</div>
+       
+        <div class="data" id="interestIncome">
+          {{report.interest_income|intcomma}}
+        </div>
+      </li>
+      <li class="list-group-item">
+        <div class="label">Processing fee</div>
+
+        <div class="data">{{report.processing_fee_income|intcomma}}</div>
+      </li>
+      <li class="list-group-item">
+        <div class="label">Registration</div>
+
+        <div class="data">{{report.loan_registration|intcomma}}</div>
+      </li>
+    <li class="list-group-item">
+        <div class="label">Penalties</div>
+
+        <div class="data">{{report.penalties_income|intcomma}}</div>
+      </li>
+      <li class="list-group-item">
+        <div class="label">Rollover charges</div>
+
+        <div class="data">{{report.total_rollover_charges|intcomma}}</div>
+      </li>
+   
+
+      <li class="list-group-item">
+        <div class="label fw-bold" style="color: #366da5;margin-right: 30px;">Gross income</div>
+     
+        <div class="data fw-bold" style="color: #366da5">
+          {{report.income_before_all_expenses|intcomma}}
+        </div>
+      </li>
+    
+    
+      <li class="list-group-item">
+        <div class="label">Total expenses </div>
+
+        <div class="data">({{report.total_expenses|intcomma}})</div>
+      </li>
+     
+
+      <li class="list-group-item" style="color: #366da5">
+        <div class="label fw-bold" style="color: #366da5">
+          Net income
+        </div>
+      
+
+        <div class="data fw-bold" style="color: #366da5">
+          {{report.income_after_expenses|intcomma}}
+        </div>
+      </li>
+     
+      <li class="list-group-item">
+        <a  class="bi bi-eye links"   class="dropdown-item links bi bi-file-spreadsheet"
+        hx-get="{%url 'income-audit'%}"
+        hx-target="#st-dialog"
+        preload
+        data-bs-toggle="modal"
+        data-bs-target="#static">Incomes audit trail</a>
+        <a  class="bi bi-eye links"   class="dropdown-item links bi bi-file-spreadsheet"
+        hx-get="{%url 'expense-audit'%}"
+        hx-target="#st-dialog"
+        preload
+        data-bs-toggle="modal"
+        style="float:right"
+        data-bs-target="#static">Expenses audit trail</a>
+       
+      </li>
+     
+     
+      <li class="list-group-item">
+        <a
+          role="button"
+          hx-get="{%url 'loans'%}"
+          _="on click remove .d-none from #table-skeleton then add .d-none to .main-container"
+          hx-push-url="true"
+          hx-target="#container"
+          class="links bi bi-house shadow-none action-button"
+          >Home</a
+        >
+        <a
+          class="bi bi-file-earmark-pdf"
+          onclick="printpdf()"
+          role="button"
+          style="color: #800; float: right"
+          >Print report</a
+        >
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+{%endfor%} 
+{%include 'transactions/skeleton-loaders/html-table.html'%}
+ {%include 'transactions/skeleton-loaders/list-group.html'%}
+
+<script type="text/javascript">
+  // =======================export to pdf
+  function printpdf() {
+    let period = document.getElementById("period").innerHTML;
+
+    let element = document.getElementById("details");
+    let options = {
+      jsPDF: {
+        format: "a4",
+      },
+      html2canvas: { letterRendering: true, useCORS: true, logging: true },
+      margin: 1,
+      image: { type: "jpeg", quality: 1 },
+      filename: period + ".pdf",
+    };
+    html2pdf(element, options);
+  }
+</script>
+
+{%endblock content%}

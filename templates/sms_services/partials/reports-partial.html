@@ -1,0 +1,13 @@
+{%for report in reports%}  
+  
+<tr>
+<td><input type='checkbox' class="form-check-input" name='ids' value='{{report.id}}'></td>   
+<td>{{report.date|date:'j b,y'}}</td>
+ <td>{{report.identifier}}</td>
+ <td>{{report.phoneNumber}}</td>
+
+ <td>{{report.status}}</td>
+</tr>
+ 
+ {%endfor%}
+

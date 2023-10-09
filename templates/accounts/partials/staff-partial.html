@@ -1,0 +1,84 @@
+{%for staff in staffs%}
+<tr>
+  <td data-label="Check">
+    <input
+      type="checkbox"
+      class="form-check-input"
+      name="ids"
+      value="{{staff.id}}"
+    />
+  </td>
+  
+  <td data-label="Name">{{staff.first_name}} {{staff.last_name}}</td>
+
+  <td data-label="Phone">{{staff.username}}</td>
+
+
+  {%if staff.is_admin == True%}
+    <td  hx-put="{%url 'make-user-not-admin'%}" hx-indicator="#spinner" hx-target="#data" data-label="Is an admin">
+      <a class="bi bi-pencil-square links  shadow-none">Is an admin</a></td>
+    {%else%}
+    <td  hx-put="{%url 'make-user-admin'%}" hx-indicator="#spinner" hx-target="#data" data-label="Is an admin"><a class="bi bi-pencil-square links  shadow-none">Is not admin</a></td>
+    {%endif%}
+
+    {%if staff.is_staff == True%}
+    <td  hx-put="{%url 'make-user-not-staff'%}" hx-indicator="#spinner" hx-target="#data" data-label="Is staff"><a class="bi bi-pencil-square links  shadow-none">Is a staff</a></td>
+    {%else%}
+    <td  hx-put="{%url 'make-user-staff'%}" hx-indicator="#spinner" hx-target="#data" data-label="Is staff"><a class="bi bi-pencil-square links  shadow-none">Is not staff</a></td>
+    {%endif%}
+    
+    <!-- {%if staff.can_approve == True%}
+    <td hx-put="{%url 'cannot-approve'%}" hx-indicator="#spinner" hx-target="#data" data-label="Loans"><a class="bi bi-pencil-square links  shadow-none">Can approve </a></td>
+    {%else%}
+    <td  hx-put="{%url 'can-approve'%}" hx-indicator="#spinner" hx-target="#data" data-label="Loans"><a class="bi bi-pencil-square links  shadow-none">Cannot approve</a></td>
+    {%endif%}
+   -->
+   
+    
+    {%if staff.is_client == True%}
+    <td hx-put="{%url 'make-user-not-client'%}" hx-indicator="#spinner" hx-target="#data" data-label="Is a client"><a class="bi bi-pencil-square links  shadow-none">Is a client </a></td>
+    {%else%}
+    <td  hx-put="{%url 'make-user-client'%}" hx-indicator="#spinner" hx-target="#data" data-label="Is a client"><a class="bi bi-pencil-square links  shadow-none">Is not a client</a></td>
+    {%endif%}
+  
+   
+    <td data-label="Actions">
+      <div class="">
+        <a
+          class="dropdown-toggle bi bi-eye links"
+          role="button"
+          id="dropdownMenuLink"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+        </a>
+  
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+          <li>
+            <a
+              class="dropdown-item links bi bi-lock"
+              role="button"
+              hx-get="{%url 'change-password'%}"
+              hx-target="#container"
+              preload
+              hx-push-url="true"
+              >Change password</a
+            >
+          </li>
+          <hr class="horizontal">
+          <li>
+            <a
+              class="dropdown-item links bi bi-person"
+              role="button"
+              hx-get="{%url 'edit-profile' staff.pk%}"
+              hx-target="#container"
+              preload
+              hx-push-url="true"
+              >Edit profile</a
+            >
+          </li>
+        </ul>
+       </td>
+ 
+</tr>
+{%endfor%}

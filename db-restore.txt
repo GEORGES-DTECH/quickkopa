@@ -1,0 +1,1 @@
+mysql -u repotranstech -h repotranstech.mysql.pythonanywhere-services.com 'repotranstech$manipap'  < manipap.sql

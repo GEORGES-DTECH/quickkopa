@@ -1,0 +1,42 @@
+{%extends 'base/index.html'%}
+ {%load crispy_forms_tags%} 
+ {%block content%}
+{%include 'base/main-nav.html'%}
+
+<br />
+<br />
+<br />
+
+<div class="parent-div container-fluid mylist-group">
+  <ul class="list-group mylist-group  shadow">
+    <li class="list-group-item">
+      <h2 class="text-center bi bi-person">Edit user</h2>
+    </li>
+
+    <li class="list-group-item">
+      <form method="POST" enctype="multipart/form-data" autocomplete="off">
+        {%csrf_token%} 
+        {{ form.media}} 
+        {{form|crispy}}
+        <br />
+        <div class="d-grid gap-2">
+          <button class="btn btn-primary shadow-none save-btn" type="submit" 
+         >
+            Submit
+          </button>
+
+          <br />
+          <a
+            hx-get="{%url 'profile'%}"
+            hx-target="#container"
+            hx-push-url="true"
+            class="btn btn-outline-secondary shadow-none"
+            >Close</a
+          >
+        </div>
+      </form>
+    </li>
+  </ul>
+</div>
+
+{%endblock content%}

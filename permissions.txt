@@ -1,0 +1,4 @@
+chmod +x /home/providaafrica/timeline-ventures/manage.py
+
+
+mysql -u repotranstech -h repotranstech.mysql.pythonanywhere-services.com 'repotranstech$manipap'  < manipapdb.sql

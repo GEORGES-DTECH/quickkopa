@@ -1,0 +1,93 @@
+{%load humanize%}
+
+<div class="modal-content" style="background-color: #fefefe;" id="details">
+  <div class="modal-header">
+    <h2 class="modal-title bi bi-person" id="staticBackdropLabel" style="margin-right: 15px;">
+      Staff report
+    </h2>
+    <a class=" bi bi-file-earmark-pdf" onclick="printpdf()" role="button" style="color: #800; margin-right: 70px;">Download </a>
+    <button
+      type="button"
+      class="btn-close shadow-none"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+    ></button>
+  </div>
+<div class="modal-body" style="color: #222222" >
+
+  <ul class="list-group list-group-flush" >
+
+  <li class="list-group-item" >
+    <div class="label">Loan officer</div>
+        
+    <div class="data">{{loan.staff.first_name}} {{loan.staff.last_name}}</div>
+
+  </li>
+
+  <li class="list-group-item" >
+    <div class="label">Phone</div>
+        
+    <div class="data">{{loan.staff.username}}</div>
+
+  </li>
+ 
+ 
+  <li class="list-group-item" >
+    <div class="label">Total Loans payable</div>
+        
+    <div class="data">{{loan.total_staff_payables|intcomma}}</div>
+
+  </li>
+  <li class="list-group-item" >
+    <div class="label">Total repayments</div>
+        
+    <div class="data">{{loan.total_staff_repayments|intcomma}}</div>
+
+  </li>
+  <li class="list-group-item" >
+    <div class="label">Total Outstandings</div>
+        
+    <div class="data">{{loan.total_staff_outstandings|intcomma}}</div>
+
+  </li>
+  <li class="list-group-item" >
+    <div class="label">Arrears</div>
+        
+    <div class="data">{{loan.total_staff_arrears|intcomma}}</div>
+
+  </li>
+  <li class="list-group-item" >
+    <div class="label">Payments due for active loans</div>
+        
+    <div class="data">{{loan.total_staff_payments_collectable|intcomma}}</div>
+
+  </li>
+  <li class="list-group-item" >
+    <div class="label">Portfolio at risk</div>
+        
+    <div class="data">{{loan.staff_portfolio_at_risk|intcomma}}</div>
+
+  </li>
+ 
+</ul>
+</div>
+
+<script type="text/javascript">
+  
+
+        
+    function printpdf(){
+      let full_name = "{{loan.staff.first_name}} {{loan.staff.last_name}}"
+      let element = document.getElementById('details');
+      let options = {
+      jsPDF: {
+      format: 'a4'
+      },
+      html2canvas:  {letterRendering: true, useCORS: true,     logging: true},
+      margin: 1,
+      image: {type: 'jpeg', quality: 1},
+      filename: full_name + 'report'+'.pdf'
+    };
+    html2pdf(element, options);
+  }
+</script>

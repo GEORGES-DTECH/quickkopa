@@ -1,0 +1,6 @@
+[{
+        "relation": ["delegate_permission/common.handle_all_urls"],
+        "target" : { "namespace": "android_app", "package_name": "com.repotranstech.timeline.twa",
+                     "sha256_cert_fingerprints": ["39:44:61:84:54:5D:2A:CC:C6:D1:61:EF:D2:E1:A4:67:47:BA:1C:07:90:65:B2:4A:F7:02:F5:AB:A5:EA:4C:CD"] }
+      }
+]

@@ -1,0 +1,96 @@
+{%load static%} 
+{%load humanize%} 
+{%for client in clients%}
+
+<tr>
+  <td data-label="Check">
+    <input
+      type="checkbox"
+      class="form-check-input"
+      name="ids"
+      value="{{client.id}}"
+    />
+  </td>
+  <td
+    data-label="Name"
+    hx-get="{%url 'client-detail' client.id%}"
+    hx-target="#dialog"
+    data-bs-toggle="modal"
+    data-bs-target="#staticBackdrop"
+    preload
+  >
+  {% filter force_escape|lower %}
+    {{client.full_name}}
+    {% endfilter %}
+  </td>
+  <td data-label="ID">{{client.id_number}}</td>
+  <td data-label="Phone">{{client.phone1}}</td>
+  <td data-label="Location">{{client.location}}</td>
+  <td data-label="Loan history"  
+           hx-get="{%url 'loan-history' client.id%}"
+            hx-target="#st-dialog"
+            data-bs-toggle="modal"
+            data-bs-target="#static"
+            class="bi bi-eye fw-normal">Loan history</td>
+
+     <td data-label="Edit"  hx-get="{%url 'edit-client' client.id%}"
+  hx-target="#container"
+
+  hx-push-url="true" class="links fw-normal bi bi-pencil-square">Edit</td>
+  <td data-label="View">
+    <div class="">
+      <a
+        class="dropdown-toggle bi bi-eye links"
+        role="button"
+        id="dropdownMenuLink"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+      </a>
+
+      <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+        <li>
+          <a
+            class="dropdown-item links bi bi-pencil-square"
+            role="button"
+            hx-get="{%url 'edit-client' client.id%}"
+            hx-target="#container"
+            preload
+            hx-push-url="true"
+            >Edit client</a
+          >
+        </li>
+        <hr class="divider" />
+
+        <li>
+          <a
+            class="dropdown-item links bi bi-person"
+            role="button"
+            hx-get="{%url 'client-detail' client.id%}"
+            hx-target="#dialog"
+            data-bs-toggle="modal"
+            data-bs-target="#staticBackdrop"
+            preload
+            >Clients details</a
+          >
+        </li>
+        <hr class="divider" />
+
+        <li>
+          <a
+            class="dropdown-item links bi bi-person"
+            role="button"
+            hx-get="{%url 'client-docs' client.id%}"
+            hx-target="#dialog"
+            data-bs-toggle="modal"
+            data-bs-target="#staticBackdrop"
+            preload
+            >Clients documents</a
+          >
+        </li>
+        
+      </ul>
+    </div>
+  </td>
+</tr>
+{%endfor%}

@@ -1,0 +1,23 @@
+{%extends 'base/index.html'%} 
+
+{%block content%}
+ {%include 'base/main-nav.html'%}
+ <br><br><br>
+ <div class="main-container">
+
+ <div class="container bulk-forms" id="forms">
+ 
+     {%include 'transactions/partials/bulkadd-clients-partial.html'%}
+
+</div>
+    <div class="container d-grid gap-2">
+ <button class="btn btn-primary action-button btn-lg  save-btn  shadow-none " type="submit" id="submit-all-clients">
+  +Submit all
+</button>
+</div>
+ 
+</div>
+ {%include 'transactions/skeleton-loaders/html-table.html'%}
+ {%include 'transactions/skeleton-loaders/list-group.html'%}
+{%endblock%}
+

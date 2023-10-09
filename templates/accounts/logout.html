@@ -1,0 +1,21 @@
+{%extends 'base/index.html'%}
+
+{%block content%}
+{%include 'base/main-nav.html'%}
+
+ <div class="parent-div">
+    <div class="card" style="width: 22rem;">
+        <div class="card-header">
+            <H2>you have logged out</H2>
+        </div>       
+                <div class="card-body">
+                    <small class="text-muted">
+                        <a class="btn btn-outline-primary btn-sm" href="{%url 'login'%}">Login again</a>
+
+                    </small>
+
+                </div>
+        </div>     
+    </div>
+</div>       
+{%endblock content%}

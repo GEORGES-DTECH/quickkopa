@@ -1,0 +1,44 @@
+
+{%load static%} 
+{%load humanize%} 
+
+{%for loan in loans%}
+<tr>
+  <td>{{loan.lending_date|date:'j b,y'}}</td>
+
+  <td id="name">
+    {% filter force_escape|lower %}
+    {{loan.client.full_name}} 
+    {%endfilter%}
+  </td>
+  <td>
+   {{loan.loan_amount|intcomma}}
+  </td>
+  <td>
+    {{loan.interest_rate|intcomma}} %
+   </td>
+
+  <td>
+    
+    {{loan.interest_charged|intcomma}}
+  
+   </td>
+   <td>
+    {{loan.processing_fee|intcomma}}
+   </td>
+  
+   <td>
+    {{loan.charges|intcomma}}
+   </td>
+   <td>
+    
+    {{loan.rollover_interest_and_charges|default_if_none:"0.00"}}
+  
+   </td>
+   <td>
+    {{loan.status}}
+   </td>
+  </tr>
+
+
+{%endfor%}

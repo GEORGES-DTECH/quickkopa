@@ -1,0 +1,42 @@
+{%extends 'base/index.html'%} 
+{% load static %} 
+{%load crispy_forms_tags%}
+{%block content%}
+ {%include 'base/main-nav.html'%}
+<br /><br /><br />
+
+<div class="parent-div container-fluid mylist-group" id="addpayment-form">
+  <ul class="list-group mylist-group shadow">
+    <li class="list-group-item">
+      <h2 class="text-center">Edit statement</h2>
+    </li>
+
+    <li class="list-group-item">
+      <form method="POST" enctype="multipart/form-data" autocomplete="off">
+        {%csrf_token%} 
+        {{form|crispy}} 
+        {{form.media}}
+        <br />
+        <div class="d-grid gap-2">
+          <button class="btn btn-primary shadow-none save-btn" type="submit"  hx-post="{%url 'edit-saving-statement' payment.id%}" hx-push-url="true" hx-target="#container" data-bs-dismiss="modal">
+            Submit
+          </button>
+          <br />
+
+          <button
+            type="button"
+            class="btn btn-outline-secondary shadow-none"
+            hx-get="{%url 'savings'%}"
+            hx-target="#container"
+            hx-push-url="true"
+            data-bs-dismiss="modal"
+          >
+            Close
+          </button>
+        </div>
+      </form>
+    </li>
+  </ul>
+</div>
+
+{%endblock%}

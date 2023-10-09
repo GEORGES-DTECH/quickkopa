@@ -1,0 +1,101 @@
+{% load static %}
+<header>
+  <nav class="navbar navbar-custom navbar-expand-sm navbar-dark fixed-top py-0">
+    <div class="container-fluid">
+      <button
+        class="navbar-toggler shadow-none"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNavDropdown"
+        aria-controls="navbarNavDropdown"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+      <svg width="25" height="25">
+        <path d="M0,5 30,5" stroke="#fff" stroke-width="2"/>
+        <path d="M0,14 30,14" stroke="#fff" stroke-width="2"/>
+        <path d="M0,23 30,23" stroke="#fff" stroke-width="2"/>
+      </svg>
+      </button>
+
+      <a class="navbar-brand fw-bold text-white"> Repotrans MS </a>
+
+      {% for message in messages %} 
+      {% if message.tags == "success" %}
+
+      <div
+        class="toast-body text-light position-fixed top-0 end-5 p-2"
+        id="toast"
+        style="z-index: 11; border-radius: 5px"
+      >
+        {{ message|safe }}
+      </div>
+
+      {% endif %} 
+      {% endfor %}
+
+      <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav ms-auto">
+          {%if user.is_authenticated%}
+
+          <hr class="my-hr text-white" />
+
+          <li class="nav-item">
+            <a
+              class="nav-link bi bi-speedometer2 text-white"
+              hx-get=""
+              hx-push-url="true"
+              hx-target="#container"
+            >
+              Dashboard
+            </a>
+          </li>
+          <hr class="my-hr text-white" />
+
+          <li class="nav-item">
+            <a
+              class="nav-link bi bi-box-arrow-right fa-lg text-white"
+              hx-get="{%url 'logout'%}"
+              hx-push-url="true"
+              hx-target="#container"
+            >
+              Logout</a
+            >
+          </li>
+          <!-- =======================unauthenticated users========================= -->
+          {%else%}
+
+          <hr class="my-hr text-white" />
+
+          <li class="nav-item">
+            <a
+              class="nav-link bi bi-box-arrow-right text-white h6"
+              hx-get="{%url 'login'%}"
+              hx-push-url="true"
+              hx-target="#container"
+            >
+              Log in</a
+            >
+          </li>
+
+          <hr class="my-hr text-white" />
+
+          <li class="nav-item">
+            <a
+              class="nav-link bi bi-person text-white h6"
+              hx-get="{%url 'signup'%}"
+              hx-push-url="true"
+              hx-target="#container"
+            >
+              Register</a
+            >
+          </li>
+
+          
+
+          {%endif%}
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>

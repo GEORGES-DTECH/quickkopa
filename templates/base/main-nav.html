@@ -1,0 +1,506 @@
+{% load static %}
+
+<!-- ===========TOP NAVBAR=================== -->
+<nav class="navbar navbar-custom navbar-expand-sm navbar-dark fixed-top py-0">
+  <div class="container-fluid">
+    <a
+      id="dropdownMenuButton1"
+      data-bs-toggle="dropdown"
+      aria-expanded="false"
+      class="d-sm-block d-md-none"
+    >
+      <svg width="25" height="25">
+        <path d="M0,5 30,5" stroke="#fff" stroke-width="2" />
+        <path d="M0,14 30,14" stroke="#fff" stroke-width="2" />
+        <path d="M0,23 30,23" stroke="#fff" stroke-width="2" />
+      </svg>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+      <li>
+        <a
+          class="dropdown-item links bi bi-people px-4"
+          hx-get="{%url 'clients'%}"
+          hx-target="#container"
+          hx-push-url="true"
+          hx-indicator="#spinner"
+          style="font-size: 17px"
+          >Clients</a
+        >
+      </li>
+      <hr class="divider" />
+
+      <li>
+        <a
+          class="dropdown-item links bi bi-bank px-4"
+          hx-get="{%url 'payments'%}"
+          hx-target="#container"
+          hx-push-url="true"
+          hx-indicator="#spinner"
+          style="font-size: 17px"
+          >Payments</a
+        >
+      </li>
+
+      <hr class="divider" />
+
+      <li>
+        <a
+          class="dropdown-item links bi bi-cash px-4"
+          hx-get="{%url 'expenses'%}"
+          hx-target="#container"
+          hx-push-url="true"
+          hx-indicator="#spinner"
+          style="font-size: 17px"
+          >Expenses</a
+        >
+      </li>
+      <hr class="divider" />
+
+      <li>
+        <a
+          class="dropdown-item links bi bi-person px-4"
+          hx-get="{%url 'profile'%}"
+          hx-target="#container"
+          hx-push-url="true"
+          hx-indicator="#spinner"
+          style="font-size: 17px"
+          >Profile</a
+        >
+      </li>
+      <hr class="divider" />
+
+      <li>
+        <a
+          class="dropdown-item links bi bi-chat-right-dots px-4"
+          hx-get="{%url 'messages'%}"
+          hx-target="#container"
+          hx-push-url="true"
+          hx-indicator="#spinner"
+          style="font-size: 17px"
+          >Bulk sms</a
+        >
+      </li>
+    </ul>
+
+    <a
+      id="dropdownMenuButton1"
+      data-bs-toggle="dropdown"
+      aria-expanded="false"
+      class="d-sm-block d-md-none"
+    >
+      <i class="bi bi-bar-chart-line h2 text-white"></i>
+    </a>
+    <ul
+      class="dropdown-menu dropdown-menu-start"
+      aria-labelledby="dropdownMenuButton1"
+    >
+    {%if user.is_admin is True%}
+      <li>
+        <a
+          class="dropdown-item links px-2"
+          hx-get="{%url 'annual-income-statement'%}"
+          hx-push-url="true"
+          hx-target="#container"
+          style="font-size: 17px"
+          _="on click remove .d-none from #card-skeleton then add .d-none to .main-container"
+          >Income statement</a
+        >
+      </li>
+
+      <hr class="divider" />
+
+      <li>
+        <a
+          class="dropdown-item links px-2"
+          hx-get="{%url 'cashflows'%}"
+          hx-push-url="true"
+          hx-target="#container"
+          style="font-size: 17px"
+          _="on click remove .d-none from #card-skeleton then add .d-none to .main-container"
+          >Cashflow statement</a
+        >
+      </li>
+      <hr class="divider" />
+
+      <li>
+        <a
+          class="dropdown-item links px-2"
+          hx-get="{%url 'annual-loan-reports'%}"
+          hx-push-url="true"
+          hx-target="#container"
+          style="font-size: 17px"
+          _="on click remove .d-none from #card-skeleton then add .d-none to .main-container"
+          >Loan reports</a
+        >
+      </li>
+      <hr class="divider" />
+
+      <li>
+        <a
+          class="dropdown-item links px-2"
+          hx-get="{%url 'balance-sheet'%}"
+          hx-push-url="true"
+          hx-target="#container"
+          style="font-size: 17px"
+          _="on click remove .d-none from #card-skeleton then add .d-none to .main-container"
+          >Balance sheet</a
+        >
+      </li>
+      {%endif%}
+    </ul>
+
+    <a
+      id="dropdownMenuButton1"
+      data-bs-toggle="dropdown"
+      aria-expanded="false"
+      class="d-sm-block d-md-none"
+    >
+      <i class="bi bi-gear h2 text-white"></i>
+    </a>
+    <ul
+      class="dropdown-menu dropdown-menu-end"
+      aria-labelledby="dropdownMenuButton1"
+    >
+      {%if user.is_superuser is True%}
+      <li>
+        <a
+          class="dropdown-item links bi bi-person px-2"
+          style="font-size: 16.5px"
+          href="/root"
+          _="on click remove .d-none from #table-skeleton then add .d-none to .main-container"
+          >Admin</a
+        >
+      </li>
+      <hr class="divider" />
+      {%endif%} 
+      {%if user.is_admin is True%}
+      <li>
+        <a
+          class="dropdown-item links bi bi-people px-2"
+          hx-get="{%url 'staff-home'%}"
+          style="font-size: 16.5px"
+          hx-push-url="true"
+          hx-target="#container"
+          _="on click remove .d-none from #table-skeleton then add .d-none to .main-container"
+          >Manage staff</a
+        >
+      </li>
+      <hr class="divider" />
+
+      <li>
+        <a
+          class="dropdown-item links bi bi-cloud-download px-2"
+          style="font-size: 17px"
+          href="https://www.pythonanywhere.com/user/providaafrica/files/home/providaafrica/timelinedb.sql"
+          >Database backup</a
+        >
+      </li>
+      {%endif%}
+      <hr class="divider" />
+
+     
+
+      <li class="dropdown-item bi bi-box-arrow-right links px-2">
+        <a
+          hx-get="{%url 'logout'%}"
+          hx-push-url="true"
+          hx-target="#container"
+          style="font-size: 16.5px"
+          hx-indicator="#spinner"
+          >Log out</a
+        >
+      </li>
+    </ul>
+
+    <a
+      class="navbar-brand text-white bi bi-house-door d-none d-lg-block d-xl-block d-xxl-block"
+      hx-get="{%url 'loans'%}"
+      hx-push-url="true"
+      hx-target="#container"
+      style="font-weight: 500"
+      _="on click remove .d-none from #table-skeleton then add .d-none to .main-container"
+    >
+      Home
+    </a>
+    <div  class="d-sm-block d-md-none">
+    <a
+      id="dropdownMenuButton1"
+      hx-get="{%url 'loans'%}"
+      hx-push-url="true"
+      hx-target="#container"
+      _="on click remove .d-none from #table-skeleton then add .d-none to .main-container"
+      data-bs-toggle="dropdown"
+      aria-expanded="false"
+     
+    >
+      <i class="bi bi-house-door h2 text-white"></i>
+    </a>
+  </div>
+    {% for message in messages %}
+     {% if message.tags == "success" %}
+
+    <div
+      class="toast-body text-white position-fixed top-0 end-5 p-2"
+      id="toast"
+      style="
+        z-index: 11;
+        border-radius: 5px;
+        font-size: large;
+        font-weight: 500;
+      "
+    >
+      {{ message|safe }}
+    </div>
+
+    {% endif %} 
+    {% endfor %} 
+    {% for message in messages %}
+     {% if message.tags == "warning" %}
+
+    <div
+      class="toast-body text-white position-fixed top-0 end-5 p-2"
+      id="flash"
+      style="z-index: 11; border-radius: 5px"
+    >
+      {{ message|safe }}
+    </div>
+
+    {% endif %} 
+    {% endfor %}
+
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav ms-auto">
+        
+        <hr class="my-hr text-white" />
+        <li class="nav-item">
+          <a
+            class="nav-link bi bi-people text-white"
+            hx-get="{%url 'clients'%}"
+            hx-push-url="true"
+            _="on click remove .d-none from #table-skeleton then add .d-none to .main-container"
+            hx-target="#container"
+          >
+            Clients
+          </a>
+        </li>
+        <hr class="my-hr text-white" />
+        <li class="nav-item">
+          <a
+            class="nav-link bi bi-bank text-white"
+            hx-get="{%url 'payments'%}"
+            hx-push-url="true"
+            _="on click remove .d-none from #table-skeleton then add .d-none to .main-container"
+            hx-target="#container"
+          >
+            Payments
+          </a>
+        </li>
+        <hr class="my-hr text-white" />
+
+        <li class="nav-item">
+          <a
+            class="nav-link bi bi-cash text-white"
+            hx-get="{%url 'expenses'%}"
+            hx-push-url="true"
+            _="on click remove .d-none from #table-skeleton then add .d-none to .main-container"
+            hx-target="#container"
+          >
+            Expenses
+          </a>
+        </li>
+
+        {%if user.is_admin == True%}
+
+        <hr class="my-hr text-white" />
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle bi bi-bar-chart-line text-white"
+            href="#"
+            id="navbarDropdown"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            Reports
+          </a>
+          <ul class="dropdown-menu shadow" aria-labelledby="navbarDropdown">
+            <li>
+              <a
+                class="dropdown-item links px-2"
+                hx-get="{%url 'annual-income-statement'%}"
+                hx-push-url="true"
+                hx-target="#container"
+                _="on click remove .d-none from #card-skeleton then add .d-none to .main-container"
+                >Income statement</a
+              >
+            </li>
+
+            <hr class="divider" />
+
+            <li>
+              <a
+                class="dropdown-item links px-2"
+                hx-get="{%url 'cashflows'%}"
+                hx-push-url="true"
+                hx-target="#container"
+                _="on click remove .d-none from #card-skeleton then add .d-none to .main-container"
+                >Cashflow statement</a
+              >
+            </li>
+            <hr class="divider" />
+
+            <li>
+              <a
+                class="dropdown-item links px-2"
+                hx-get="{%url 'annual-loan-reports'%}"
+                hx-push-url="true"
+                hx-target="#container"
+                _="on click remove .d-none from #card-skeleton then add .d-none to .main-container"
+                >Loan reports</a
+              >
+            </li>
+            <hr class="divider" />
+
+            <li>
+              <a
+                class="dropdown-item links px-2"
+                hx-get="{%url 'balance-sheet'%}"
+                hx-push-url="true"
+                hx-target="#container"
+                _="on click remove .d-none from #card-skeleton then add .d-none to .main-container"
+                >Balance sheet</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <hr class="text-white" />
+
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle bi bi-gear text-white"
+            href="#"
+            id="navbarDropdown"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            Settings
+          </a>
+          <ul class="dropdown-menu shadow" aria-labelledby="navbarDropdown">
+            {%if user.is_superuser is True%}
+            <li>
+              <a
+                class="dropdown-item links bi bi-person px-2"
+                href="/root"
+                _="on click remove .d-none from #table-skeleton then add .d-none to .main-container"
+                >Admin</a
+              >
+            </li>
+            <hr class="divider" />
+            {%endif%} 
+            {%if user.is_admin is True%}
+            <li>
+              <a
+                class="dropdown-item links bi bi-people px-2"
+                hx-get="{%url 'staff-home'%}"
+                hx-push-url="true"
+                hx-target="#container"
+                _="on click remove .d-none from #table-skeleton then add .d-none to .main-container"
+                >Manage staff</a
+              >
+            </li>
+            <hr class="divider" />
+
+            <li>
+              <a
+                class="dropdown-item links bi bi-cloud-download px-2"
+                href="https://www.pythonanywhere.com/user/repotranstech/files/home/repotranstech/timelinedb.sql"
+                >Database backup</a
+              >
+            </li>
+            {%endif%}
+            <hr class="divider" />
+
+            <li class="dropdown-item bi bi-bank links px-2">
+              <a
+                hx-get="{%url 'subscription'%}"
+                hx-push-url="true"
+                _="on click remove .d-none from #card-skeleton then add .d-none to .main-container"
+                hx-target="#container"
+                >Subscription</a
+              >
+            </li>
+            <hr class="divider" />
+
+            <li class="dropdown-item bi bi-box-arrow-right links px-2">
+              <a
+                hx-get="{%url 'logout'%}"
+                hx-push-url="true"
+                hx-target="#container"
+                hx-indicator="#spinner"
+                >Log out</a
+              >
+            </li>
+          </ul>
+        </li>
+        {%else%}
+        <li class="nav-item">
+          <a
+            class="nav-link bi bi-person text-white"
+            hx-get="{%url 'staff-home'%}"
+            hx-push-url="true"
+            hx-indicator="#spinner"
+            hx-target="#container"
+          >
+            Profile
+          </a>
+        </li>
+        <hr class="my-hr text-white" />
+
+        <li class="nav-item">
+          <a
+            class="nav-link bi bi-box-arrow-right text-white"
+            hx-get="{%url 'logout'%}"
+            hx-push-url="true"
+            hx-target="#container"
+            hx-indicator="#spinner"
+          >
+            Log out</a
+          >
+        </li>
+        {%endif%}
+        <hr class="my-hr text-white" />
+
+        <li class="nav-item">
+          <a
+            class="nav-link bi bi-person text-white"
+            hx-get="{%url 'profile'%}"
+            hx-push-url="true"
+            _="on click remove .d-none from #card-skeleton then add .d-none to .main-container"
+            hx-target="#container"
+          >
+            Profile
+          </a>
+        </li>
+
+        <hr class="my-hr text-white" />
+
+        <li class="nav-item">
+          <a
+            class="nav-link bi bi-chat-right-dots text-white"
+            hx-get="{%url 'messages'%}"
+            hx-push-url="true"
+            _="on click remove .d-none from #table-skeleton then add .d-none to .main-container"
+            hx-target="#container"
+          >
+            Bulk sms
+          </a>
+        </li>
+
+        <hr class="my-hr text-white" />
+
+      </ul>
+    </div>
+  </div>
+</nav>

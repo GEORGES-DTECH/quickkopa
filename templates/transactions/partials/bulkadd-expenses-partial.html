@@ -1,0 +1,75 @@
+{% load static %} 
+{%load crispy_forms_tags%}
+<ul class="list-group shadow">
+  <li class="list-group-item">
+    <h2 class="text-center">Add expenses</h2>
+  </li>
+  <li class="list-group-item">
+    <form
+      hx-post="{%url 'bulk-create-expenses'%}"
+      hx-target="#container"
+      hx-push-url="true"
+      hx-trigger="click from:#submit-all-expenses"
+    >
+      <div class="row">
+        <div class="col-6 col-md-3">
+          <label for="{{form.lending_date.id_for_label}}">{{form.lending_date.label}}</label>
+          {{form.lending_date}}
+          {{form.media}}
+           
+        </div>
+        <div class="col-6 col-md-3">
+          <label for="{{form.expense_amount.id_for_label}}"
+            >{{form.expense_amount.label}}</label
+          >
+          {{form.expense_amount}}
+        </div>
+        <div class="col-3 col-md-3">
+          <label for="{{form.category.id_for_label}}"
+            >{{form.category.label}}</label
+          >
+          {{form.category}}
+        </div>
+
+      
+        <div class="col-3 col-md-3">
+          <label for="{{form.mode_of_payment.id_for_label}}"
+            >{{form.mode_of_payment.label}}</label
+          >
+          {{form.mode_of_payment}}
+        </div>
+        
+      </div>
+    </form>
+  </li>
+  <li class="list-group-item">
+    <button
+      class="btn btn-outline-secondary  btn-sm action-button shadow-none"
+      type="submit"
+      hx-get="{%url 'add-expense-forms'%}"
+      hx-target="#forms"
+      hx-swap="beforeend"
+      style="margin-right: 15px"
+    >
+      +Add a form
+    </button>
+    <button
+      class="btn btn-outline-secondary btn-sm action-button shadow-none"
+      type="submit"
+      hx-get="{%url 'expenses'%}"
+      hx-target="#container"
+      hx-push-url="true"
+      style="margin-right: 15px"
+    >
+      Cancel
+    </button>
+    <b
+      class="bi bi-arrow-clockwise links"
+      role="button"
+      onclick="location.reload()"
+      >Reload</b
+    >
+    <small style="color: #800;">(Removes all added forms)</small>
+  </li>
+</ul>
+<br />

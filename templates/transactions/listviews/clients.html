@@ -1,0 +1,207 @@
+{%extends 'base/index.html'%}
+ {% load static %} 
+ {%load humanize%} 
+ {%block content%} 
+ {%include 'base/main-nav.html'%}
+<br />
+<br />
+<br />
+
+{%include 'transactions/forms/add-client.html'%}
+
+<div class="container main-container" id="clients-container">
+  <input
+    type="text"
+    class="form-control search-card"
+    placeholder="Search by name/phone......."
+    name="search"
+    hx-get="{%url 'client-search'%}"
+    hx-trigger="keyup[delay:300ms]"
+    hx-target="#data"
+    hx-indicator="#spinner"
+    autocomplete="off"
+  />
+  <hr style="height: 0.5px" />
+
+  <div hx-include="#checked-clients" hx-target="#data">
+    <button
+      type="button"
+      class="btn btn-primary btn-sm  action-button"
+      _="on click remove .d-none from #client-form then add .d-none to #clients-container"
+      style="margin-right: 20px"
+    >
+      Add client
+    </button>
+
+    <button
+      class="btn btn-outline-secondary shadow-none action-button btn-sm dropdown-toggle"
+      type="button"
+      id="dropdownMenuButton1"
+      data-bs-toggle="dropdown"
+      aria-expanded="false"
+    >
+      Actions
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+      <li>
+        <a
+          class="dropdown-item px-2 links"
+          hx-get="{%url 'loans'%}"
+          hx-target="#container"
+          hx-push-url="true"
+          _="on click remove .d-none from #table-skeleton then add .d-none to .main-container"
+        
+          >Manage loans</a
+        >
+      </li>
+      <hr class="divider"/>
+      <li>
+        <a
+          class="dropdown-item px-2 links"
+          hx-get="{%url 'payments'%}"
+          hx-target="#container"
+          hx-push-url="true"
+          _="on click remove .d-none from #table-skeleton then add .d-none to .main-container"
+       
+          >Manage payments</a
+        >
+      </li>
+     
+    </ul>
+  </div>
+
+  <div class="table-responsive">
+    <form id="checked-clients">
+      <table
+        class="table caption-top table-sm  table-bordered table-hover main-table"
+        id="content-div"
+      >
+        <caption class="caption">
+          <small class="caption"   class="bi bi-trash3 delete-link btn-sm shadow-none"
+          hx-delete="{%url 'delete-clients'%}"
+          hx-target="#data"
+          hx-indicator="#spinner"
+          hx-confirm="Do you want to delete selected clients?"
+          style="margin-right: 10px">Clients</small>
+
+          
+          <a
+          class="links px-2 "
+         
+           hx-get="{%url 'bulk-create-clients'%}"
+           hx-indicator="#spinner"
+           hx-target="#container"
+           hx-push-url="true"
+          >+Bulk add </a
+        >
+        
+          <a
+          class="links bi bi-arrow-clockwise"
+         
+           hx-get="{%url 'clients'%}"
+           hx-indicator="#spinner"
+           hx-target="#container"
+           hx-push-url="true"
+      
+
+          >Refresh</a
+        >
+      </caption>
+        <thead>
+          <tr>
+            <th scope="col">  <input
+              type="checkbox"
+              class="form-check-input shadow-none"
+          
+              id="option{{client.id}}"
+              value="{{client.id}}"
+            /></th>
+            <th scope="col">Name</th>
+            <th scope="col">Id.no</th>
+            <th scope="col">Phone</th>
+            <th scope="col">Location</th>
+            <th scope="col">Loan history</th>
+            <th scope="col">Edit</th>
+            <th scope="col">Actions</th>
+
+          </tr>
+        </thead>
+
+        <tbody id="data">
+          {%include 'transactions/partials/clients-partial.html'%}
+        </tbody>
+      </table>
+      <div >
+        <nav aria-label="Page navigation example">
+          <ul class="pagination pagination-sm">
+            {%if clients.has_next%}
+
+            <li class="page-item">
+              <a
+                class="page-link links"
+                hx-get="?page={{clients.next_page_number}}"
+                hx-target="#container"
+                hx-push-url="true"
+              >
+                Next
+              </a>
+            </li>
+
+            {%endif%}
+             {%if clients.has_previous%}
+            <li class="page-item">
+              <a
+                class="page-link links"
+                hx-get="{% url 'clients'%}"
+                hx-target="#container"
+                hx-push-url="true"
+                >First</a
+              >
+            </li>
+            <li class="page-item">
+              <a class="page-link links"
+                >{{clients.number}}/{{clients.paginator.num_pages}}</a
+              >
+            </li>
+
+            <li class="page-item">
+              <a
+                class="page-link links"
+                hx-get="?page={{clients.previous_page_number}}"
+                hx-target="#container"
+                hx-push-url="true"
+                preload
+                >Previous</a
+              >
+            </li>
+            {%endif%}
+          </ul>
+        </nav>
+      </div>
+    </form>
+  <hr style="height: 0.5px" />
+
+  </div>
+ </div>
+
+{%include 'transactions/skeleton-loaders/html-table.html'%}
+{%include 'transactions/skeleton-loaders/list-group.html'%}
+  <script type="text/javascript">
+    function ExportToExcel(type, fn, dl) {
+      var elt = document.getElementById("content-div");
+      var wb = XLSX.utils.table_to_book(elt, { sheet: "sheet1" });
+      return dl
+        ? XLSX.write(wb, { bookType: type, bookSST: true, type: "base64" })
+        : XLSX.writeFile(wb, fn || "active loans" + (type || "xlsx"));
+    }
+
+    $("#option{{client.id}}").change(function () {
+      if ($(this).prop("checked")) {
+        $("input").prop("checked", true);
+      } else {
+        $("input").prop("checked", false);
+      }
+    });
+    $("#option{{client.id}}").trigger("change");
+  </script>
+{%endblock%}

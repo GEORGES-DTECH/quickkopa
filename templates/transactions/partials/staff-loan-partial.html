@@ -1,0 +1,127 @@
+{%load static%}
+ {%load humanize%} 
+ {%for loan in loans%}
+<tr>
+  <td
+    role="button"
+    hx-get="{%url 'loan-detail' loan.id%}"
+    hx-target="#dialog"
+    data-bs-toggle="modal"
+    data-bs-target="#staticBackdrop"
+    preload
+    data-label="Client"
+  >
+   
+    {{loan.client.full_name}}
+   
+  </td>
+
+  <td data-label="Payable">{{loan.payable_amount|intcomma}}</td>
+  <td
+    hx-get="{%url 'loan-statement' loan.id%}"
+    hx-target="#st-dialog"
+    preload
+    data-bs-toggle="modal"
+    data-bs-target="#static"
+    data-label="Paid"
+    style="font-size: 16px"
+  >
+    {{loan.repayments|intcomma}}
+  </td>
+
+  <td data-label="Outstanding">{{loan.outstanding_loan|intcomma}}</td>
+  <td data-label="Installment">{{loan.installment|intcomma}}</td>
+  <td data-label="Aging">
+    <a
+      class="dropdown-toggle links"
+      style="font-weight: 400"
+      role="button"
+      id="dropdownMenuLink"
+      data-bs-toggle="dropdown"
+      aria-expanded="false"
+    >
+      {{loan.loan_aging_calculation}}
+    </a>
+    <ul class="dropdown-menu shadow fw-bold" aria-labelledby="dropdownMenuLink">
+      <li>Installment is {{loan.installment|intcomma}}</li>
+      <hr class="divider" />
+      <li>Arrears :{{loan.arrears|intcomma}}</li>
+      <hr class="divider" />
+      <li>To pay {{loan.payment_plan}}</li>
+      <hr class="divider" />
+    </ul>
+  </td>
+
+  <td
+    role="button"
+    hx-get="{%url 'staff-report' loan.id%}"
+    hx-target="#dialog"
+    data-bs-toggle="modal"
+    data-bs-target="#staticBackdrop"
+    class="bi bi-bar-chart-line links"
+    preload
+    style="font-weight: 400"
+    data-label="Report"
+  >
+    Report
+  </td>
+
+  <td data-label="Status">
+    <a
+      class="dropdown-toggle bi bi-eye links"
+      role="button"
+      id="dropdownMenuLink"
+      data-bs-toggle="dropdown"
+      aria-expanded="false"
+    >
+    {{loan.status}}
+    </a>
+
+    <ul class="dropdown-menu shadow" aria-labelledby="dropdownMenuLink">
+      <li>
+        <a
+          class="dropdown-item links bi bi-telephone-outbound"
+          role="button"
+          href="tel:{{loan.client.phone1}}"
+          >Call client</a
+        >
+      </li>
+
+      <hr class="divider" />
+
+      <li>
+        <a
+          class="dropdown-item links bi bi-person"
+          role="button"
+          hx-get="{%url 'loan-detail' loan.id%}"
+          hx-target="#dialog"
+          data-bs-toggle="modal"
+          data-bs-target="#staticBackdrop"
+          preload
+          >Loan details</a
+        >
+      </li>
+
+      <hr class="divider" />
+
+      <li>
+        <a
+          class="dropdown-item links bi bi-file-spreadsheet"
+          hx-get="{%url 'loan-statement' loan.id%}"
+          hx-target="#st-dialog"
+          preload
+          data-bs-toggle="modal"
+          data-bs-target="#static"
+          style="font-size: 16px"
+          >Loan Statement</a
+        >
+      </li>
+      <hr class="divider" />
+      <li>
+        <a class="links">Status :{{loan.status}}</a>
+      </li>
+    </ul>
+  </td>
+</tr>
+
+{%endfor%}

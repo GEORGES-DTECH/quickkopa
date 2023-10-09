@@ -1,0 +1,141 @@
+{%extends 'base/index.html'%}
+ {%load humanize%} 
+ {%load crispy_forms_tags%}
+{%block content%}
+ {%include 'base/main-nav.html'%}
+<br />
+<br />
+<br />
+
+<div class="main-container">
+
+<div class="parent-div container mylist-group py-2">
+  <ul
+    class="list-group mylist-group  shadow"
+    x-data="{show: false}"
+  >
+    <li class="list-group-item">
+      <h6
+        style="color: #363636; cursor: pointer"
+        class="bi bi-search"
+        @click="show=!show"
+        x-text="show ? '..Close': '..Search' "
+        role="button"
+      ></h6>
+
+      <form
+        x-show="show"
+        hx-get="{%url 'annual-savings-reports'%}"
+        hx-target="body"
+        hx-indicator="#spinner"
+      >
+        {{report_filter.form|crispy}}
+        <br />
+        <div class="d-grid gap-2">
+          <button
+            class="btn btn-outline-primary action-button btn-sm shadow-none"
+          >
+            Search
+          </button>
+        </div>
+      </form>
+    </li>
+  </ul>
+</div>
+ 
+
+ 
+{%for saving in savings%}
+<div class="parent-div container-fluid mylist-group" id="details">
+            
+  <ul class="list-group mylist-group  shadow">
+      <li class="list-group-item text-center">
+       <h3 id="period">{{saving.year}} SAVINGS REPORTS </h3>
+       <a hx-get="{%url 'general-savings-reports'%}"
+       hx-push-url="true"
+       hx-target="#container"
+       hx-indicator="#spinner" class="links btn btn-outline-secondary btn-sm">View general savings reports</a>
+      </li>
+      <li class="list-group-item">
+        <div class="label">Savings</div>
+      
+        <div class="data">{{saving.total_savings|intcomma}}</div>
+
+    </li>
+    <li class="list-group-item">
+      <div class="label">Withdraws</div>
+    
+      <div class="data">({{saving.total_withdraws|intcomma}})</div>
+
+  </li>
+    <li class="list-group-item">
+      <div class="label">Savings balance</div>
+    
+      <div class="data">{{saving.total_balance|intcomma}}</div>
+
+  </li>
+  
+  <li class="list-group-item">
+    <div class="label">Risk management fund</div>
+  
+    <div class="data">{{saving.risk_management_fund|intcomma}}</div>
+
+</li>
+<li class="list-group-item">
+  <div class="label">Charges</div>
+
+  <div class="data">{{saving.saving_charges|intcomma}}</div>
+
+</li>
+<li class="list-group-item">
+  <div class="label">Penalties</div>
+
+  <div class="data">{{saving.saving_penalties|intcomma}}</div>
+
+</li>
+
+    
+    <li class="list-group-item">
+      <a
+      role="button"
+      hx-get="{%url 'loans'%}"
+      hx-indicator="#spinner"
+      hx-push-url="true"
+      hx-target="#container"
+      class="btn btn-outline-primary btn-sm bi bi-house shadow-none action-button"
+      style="margin-right: 15px;"
+      >Home</a
+    >
+   
+    <a class=" bi bi-file-earmark-pdf" onclick="printpdf()" role="button" style="color: #800; float: right;">Print report</a>
+    </li>
+
+  </ul>
+</div>   
+
+{%endfor%}
+
+<script type="text/javascript">
+  function printpdf(){
+    let period =  document.getElementById('period').innerHTML;
+  
+    let element = document.getElementById('details');
+    let options = {
+    jsPDF: {
+    format: 'a4'
+    },
+    html2canvas:  {letterRendering: true, useCORS: true,     logging: true},
+    margin: 1,
+    image: {type: 'jpeg', quality: 1},
+    filename: period+'.pdf'
+  };
+  html2pdf(element, options);
+}
+</script>
+
+
+
+
+
+</div>
+ {%endblock%}

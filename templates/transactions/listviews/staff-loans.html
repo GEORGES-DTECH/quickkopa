@@ -1,0 +1,133 @@
+{%extends 'base/index.html'%} 
+{% load static %} 
+{%load humanize%} 
+{%block content%} 
+{%include 'base/main-nav.html'%}
+<br />
+<br />
+<br />
+
+<div class="container" id="loans-container">
+  <input
+    type="text"
+    id="search-input"
+    class="form-control search-card"
+    placeholder="Search by date/status/client......."
+    name="search"
+    hx-get="{%url 'search-loans'%}"
+    hx-trigger="keyup[delay:1000ms]"
+    hx-target="#data"
+    hx-indicator="#spinner"
+    autocomplete="off"
+  />
+  <hr style="height: 0.5px" />
+
+  <div class="table-responsive">
+    <form id="checked-transactions">
+      <table
+        class="table caption-top table-sm table-hover table-bordered main-table"
+        id="loans"
+      >
+        <caption class="caption">
+          <b class="caption" style="margin-right: 10px"
+            >{{user.first_name}} {{user.last_name}}'s loans</b
+          >
+
+          <a
+            onclick="location.reload()"
+            role="button"
+            class="bi links bi-arrow-clockwise"
+            >Refresh</a
+          >
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col">Client</th>
+            <th scope="col">Payable</th>
+            <th scope="col">Paid</th>
+            <th scope="col">Outstanding</th>
+            <th scope="col">Installment</th>
+            <th scope="col">Aging</th>
+            <th scope="col">Reports</th>
+            <th scope="col">Status</th>
+          </tr>
+        </thead>
+        <tbody id="data">
+          {%include 'transactions/partials/staff-loan-partial.html'%}
+        </tbody>
+      </table>
+    </form>
+    <nav aria-label="Page navigation example">
+      <ul class="pagination pagination-sm">
+        {%if loans.has_next%}
+
+        <li class="page-item">
+          <a
+            class="page-link links"
+            hx-get="?page={{loans.next_page_number}}"
+            hx-target="#container"
+            hx-push-url="true"
+          >
+            Next
+          </a>
+        </li>
+
+        {%endif%} {%if loans.has_previous%}
+        <li class="page-item">
+          <a
+            class="page-link links"
+            hx-get="{% url 'loans'%}"
+            hx-target="#container"
+            hx-push-url="true"
+            >First</a
+          >
+        </li>
+        <li class="page-item">
+          <a class="page-link links"
+            >{{loans.number}}/{{loans.paginator.num_pages}}</a
+          >
+        </li>
+
+        <li class="page-item">
+          <a
+            class="page-link links"
+            hx-get="?page={{loans.previous_page_number}}"
+            hx-target="#container"
+            hx-push-url="true"
+            preload
+            >Previous</a
+          >
+        </li>
+        {%endif%}
+      </ul>
+    </nav>
+  </div>
+  <hr style="height: 0.5px" />
+
+  <script type="text/javascript">
+    function ExportToExcel(type, fn, dl) {
+      var elt = document.getElementById("loans");
+      var wb = XLSX.utils.table_to_book(elt, {
+        sheet: "sheet1",
+      });
+
+      return dl
+        ? XLSX.write(wb, {
+            bookType: type,
+            bookSST: true,
+            type: "base64",
+          })
+        : XLSX.writeFile(wb, fn || "Loans" + (type || ".xlsx"));
+    }
+
+    $("#option{{loan.id}}").change(function () {
+      if ($(this).prop("checked")) {
+        $("input").prop("checked", true);
+      } else {
+        $("input").prop("checked", false);
+      }
+    });
+    $("#option{{loan.id}}").trigger("change");
+  </script>
+</div>
+{%endblock%}

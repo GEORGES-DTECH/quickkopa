@@ -1,0 +1,107 @@
+{%extends 'base/index.html'%} 
+{% load static %} 
+{%load humanize%} 
+{%block content%} 
+{%include 'base/main-nav.html'%} 
+<br /><br /><br />
+<div class="container main-container">
+  <hr style="height: 0.5px" />
+
+  <div class="table-responsive">
+    <table
+      class="table table-sm caption-top main-table table-bordered table-hover"
+      id="loans"
+    >
+      <caption class="caption">
+        <small style="margin-right: 15px" class="caption">Weekly loans</small>
+
+      
+
+        <a
+        class="links bi bi-house"
+        hx-get="{%url 'loans'%}"
+        hx-target="#container"
+        _="on click remove .d-none from #table-skeleton then add .d-none to .main-container"
+        hx-push-url="true"
+     
+        >Home</a
+      >
+
+      
+      </caption>
+      <thead class="fw-bold" style="color: #366da5">
+        <tr>
+          <th scope="col">Due</th>
+          <th scope="col">Client</th>
+          <th scope="col">Payable</th>
+          <th scope="col">Paid</th>
+          <th scope="col">Outstanding</th>
+          <th scope="col">Installment</th>
+          <th scope="col">Arrears</th>
+          <th scope="col">Call</th>
+        </tr>
+      </thead>
+      <tbody>
+        {%for loan in loans%}
+        <tr>
+          <td data-label="Day">{{loan.day}}</td>
+          <td data-label="Client">
+            {{loan.client.full_name}}
+        
+          </td>
+
+          <td data-label="Payable">{{loan.payable_amount|intcomma}}</td>
+          <td data-label="Paid">{{loan.repayments|intcomma}}</td>
+          <td data-label="Outstanding">{{loan.outstanding_loan|intcomma}}</td>
+          <td data-label="Installment">{{loan.installment|intcomma}}</td>
+          <td data-label="Arrears">{{loan.arrears|intcomma}}</td>
+
+          <td data-label="Call client">
+            <a
+              class="links"
+              role="button"
+              href="tel:{{loan.client.phone1}}"
+            >{{loan.client.phone1}}</a>
+          </td>
+          {%endfor%}
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <hr style="height: 0.5px" />
+</div>
+{%include 'transactions/skeleton-loaders/html-table.html'%}
+{%include 'transactions/skeleton-loaders/list-group.html'%}
+
+
+  <script type="text/javascript">
+    function ExportToExcel(type, fn, dl) {
+      let elt = document.getElementById("loans");
+      let name = "Due today";
+      let wb = XLSX.utils.table_to_book(elt, { sheet: "sheet1" });
+      return dl
+        ? XLSX.write(wb, { bookType: type, bookSST: true, type: "base64" })
+        : XLSX.writeFile(wb, fn || name + (type || ".xlsx"));
+    }
+
+    function printpdf() {
+      let element = document.getElementById("loans");
+      let Overdueloans = "Due today";
+
+      let options = {
+        jsPDF: {
+          format: "a4",
+        },
+        html2canvas: {
+          letterRendering: true,
+          useCORS: true,
+          logging: true,
+        },
+        margin: 1,
+        image: { type: "jpeg", quality: 1 },
+        filename: Overdueloans + ".pdf",
+      };
+      html2pdf(element, options);
+    }
+  </script>
+{%endblock%}

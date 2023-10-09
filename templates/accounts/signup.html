@@ -1,0 +1,88 @@
+{%extends 'base/index.html'%}
+ {%load crispy_forms_tags%}
+  {%load static%} 
+  {%block content%} 
+  {%include 'base/nav.html'%}
+
+<br />
+<br />
+<br />
+
+<div class="parent-div container-fluid mylist-group">
+  <ul class="list-group mylist-group  shadow">
+    <li class="list-group-item">
+      <h2 class="text-center bi bi-person-square">Register</h2>
+    </li>
+
+    <li class="list-group-item">
+      {% for message in messages %} 
+      {% if message.tags == "warning" %}
+      <div class="alert alert-success" role="alert">{{ message|safe }}</div>
+      {% endif %} 
+      {% endfor %}
+      <form method="POST" enctype="multipart/form-data" autocomplete="off">
+        {%csrf_token%} 
+        {{form|crispy}}
+        <br />
+        <small
+          style="cursor: pointer; float: right; color: #366da5"
+          id="togglesignup"
+          class="fw-bold"
+          role="button"
+          onclick="Togglesignup()"
+          >Show password</small
+        >
+        <br />
+        <br />
+        <div class="d-grid gap-2">
+          <button
+            class="btn btn-primary shadow-none save-btn"
+            hx-post="{%url 'signup'%}"
+            hx-target="#container"
+            hx-push-url="true"
+            type="submit"
+          >
+            Register
+          </button>
+        </div>
+      </form>
+    </li>
+
+    <li class="list-group-item">
+      <small class="text-muted" >
+        Already have an account?
+        <a
+          class="ml-2 links"
+          hx-get="{%url 'login'%}"
+          hx-target="#container"
+          hx-push-url="true"
+          style="font-size: small;"
+          >Login</a
+        >
+      </small>
+    </li>
+  </ul>
+</div>
+
+<script>
+  {
+    function Togglesignup() {
+      const togglesignup = document.getElementById("togglesignup");
+
+      const password1 = document.getElementById("id_password1");
+
+      if (togglesignup.innerText === "Show password") {
+        togglesignup.innerText = "Hide password ";
+
+        password1.setAttribute("type", "text");
+      } else {
+        togglesignup.innerText = "Show password";
+
+        password1.setAttribute("type", "password");
+      }
+    }
+  }
+
+</script>
+
+{%endblock content%}

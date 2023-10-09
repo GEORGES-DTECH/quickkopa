@@ -1,0 +1,16 @@
+{%for message in messages%}
+
+<tr>
+  <td data-label="Check">
+    <input
+      type="checkbox"
+      class="form-check-input"
+      name="ids"
+      value="{{message.id}}"
+    />
+  </td>
+  <td data-label="Sent">{{message.date|timesince}} ago</td>
+  <td data-label="Phone">{{message.phone_numbers}}</td>
+  <td data-label="Message">{{message.text_message}}</td>
+</tr>
+{%endfor%}

@@ -1,0 +1,143 @@
+{%extends 'base/index.html'%}
+ {%load humanize%}
+  {%load crispy_forms_tags%}
+{%block content%} 
+{%include 'base/main-nav.html'%}
+<br />
+<br />
+<br />
+
+<div class="main-container">
+  {%for saving in savings%}
+  <div class="parent-div container-fluid mylist-group" id="details">
+    <ul class="list-group mylist-group shadow" x-data="{show: false}">
+      <li class="list-group-item text-center">
+        <h3 id="period">GENERAL SAVINGS REPORTS</h3>
+        <a
+          hx-get="{%url 'annual-savings-reports'%}"
+          hx-push-url="true"
+          hx-target="#container"
+          _="on click remove .d-none from #card-skeleton then add .d-none to .main-container"
+          class="links btn btn-outline-secondary btn-sm"
+          >View annual savings reports</a
+        >
+      </li>
+
+      <li class="list-group-item">
+        <div class="label">Savings</div>
+
+        <div class="data">{{saving.total_savings|intcomma}}</div>
+      </li>
+      <li class="list-group-item">
+        <div class="label">Withdraws</div>
+
+        <div class="data">({{saving.total_withdraws|intcomma}})</div>
+      </li>
+      <li class="list-group-item">
+        <div class="label">Savings balance</div>
+        <a
+          class="bi bi-three-dots-vertical text-center px-4 links"
+          @click="show=!show" x-text = "show ? 'Hide graph': 'Show graph' "
+          ></a
+        >
+        <div class="data">{{saving.total_balance|intcomma}}</div>
+      </li>
+      <li class="list-group-item parent-div" x-show="show" style="height: 40vh;">
+        <canvas id="myChart" ></canvas>
+      </li>
+
+      <li class="list-group-item">
+        <a
+        role="button"
+        hx-get="{%url 'loans'%}"
+        _="on click remove .d-none from #table-skeleton then add .d-none to .main-container"
+        hx-push-url="true"
+        hx-target="#container"
+        class="links bi bi-house shadow-none action-button"
+        >Home</a
+      >
+
+        <a
+          class="bi bi-file-earmark-pdf"
+          onclick="printpdf()"
+          role="button"
+          style="color: #800; float: right"
+          >Print report</a
+        >
+      </li>
+    </ul>
+  </div>
+</div>
+
+<script>
+  {
+    let graph = document.getElementById("myChart");
+
+    // ==============charts============================
+    let savings = parseFloat("{{saving.total_savings}}")
+    let withdraws = parseFloat("{{saving.total_withdraws}}");
+    let balance = parseFloat("{{saving.total_balance}}");
+   
+
+     new Chart(graph, {
+      type: "bar",
+      data: {
+        labels: ["Savings analysis"],
+        datasets: [
+          {
+            label: "Savings",
+            data: [savings],
+            borderWidth: 1,
+            backgroundColor: '#366da5',
+            
+          },
+         {
+            label: "Withdraws",
+            data: [withdraws],
+            borderWidth: 1,
+            backgroundColor: '#800',
+
+          },
+          {
+            label: "Saving Balances",
+            data: [balance],
+            borderWidth: 1,
+            backgroundColor: '#355e3b',
+
+          },
+          
+         
+        ],
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+          },
+        },
+      },
+    });
+  }
+</script>
+{%endfor%} 
+{%include 'transactions/skeleton-loaders/html-table.html'%} 
+{%include 'transactions/skeleton-loaders/list-group.html'%}
+<script type="text/javascript">
+  function printpdf() {
+    let period = document.getElementById("period").innerHTML;
+
+    let element = document.getElementById("details");
+    let options = {
+      jsPDF: {
+        format: "a4",
+      },
+      html2canvas: { letterRendering: true, useCORS: true, logging: true },
+      margin: 1,
+      image: { type: "jpeg", quality: 1 },
+      filename: period + ".pdf",
+    };
+    html2pdf(element, options);
+  }
+</script>
+
+{%endblock%}

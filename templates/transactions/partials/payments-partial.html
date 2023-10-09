@@ -1,0 +1,43 @@
+  
+     
+{%load humanize%}
+{%for payment in payments%}
+
+<tr>
+<td data-label="Check" ><input type='checkbox' class="form-check-input" name='ids' value='{{payment.id}}'></td>
+<td data-label="Payment date" >{{payment.payment_date|date:'j b,y'}}</td>
+{%if payment.transaction.client.full_name is not None%}
+<td data-label="Name" >
+   
+    {{payment.transaction.client.full_name}}
+
+</td>
+ {%else%}
+<td data-label="Name">
+<small style="color: #800;">Unreconciled(call {{payment.MSISDN}})</small>
+</td>
+ {%endif%}
+<td data-label="Account">{{payment.BillRefNumber}}</td>
+
+<td data-label="Phone" >{{payment.transaction.client.phone1}}</td>
+<td data-label="Amount" >{{payment.amount|intcomma}}</td>
+
+<td data-label="Ref">{{payment.TransID}}</td>
+<td data-label="Payment reason" >{{payment.payment_reason}}</td>
+<td data-label="Edit" >  <a
+   hx-get="{%url 'edit-payment' payment.id%}"
+   hx-push-url="true"
+   hx-target="#container"
+   data-bs-dismiss="modal"
+   aria-label="Close"
+   role="button"
+   class="links bi bi-pencil-square d-print-none"
+ ></a></td>
+
+
+
+</tr>
+{%endfor%}
+
+
+ 

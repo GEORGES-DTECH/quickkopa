@@ -1,0 +1,45 @@
+{%extends 'base/index.html'%} 
+{%load crispy_forms_tags%} 
+{%block content%}
+{%include 'base/main-nav.html'%}
+ <br /><br /><br />
+<div class="parent-div container-fluid mylist-group" id="loan-form">
+  <ul class="list-group shadow mylist-group">
+    <li class="list-group-item">
+      <h2 class="text-center">Send messages</h2>
+    </li>
+
+    <li class="list-group-item">
+      <form
+        method="POST"
+        enctype="multipart/form-data"
+        autocomplete="off"
+        hx-push-url="true"
+        hx-post="{%url 'create-message'%}"
+        hx-target="#container"
+      >
+        {%csrf_token%} 
+        {{form|crispy}}
+
+        <br />
+        <div class="d-grid gap-2">
+          <button class="btn btn-primary save-btn" type="submit">
+            Send messages
+          </button>
+
+          <br />
+
+          <button
+            type="button"
+            class="btn btn-outline-secondary shadow-none"
+            onclick="window.history.go(-1)"
+          >
+            Close
+          </button>
+        </div>
+      </form>
+    </li>
+  </ul>
+</div>
+
+{%endblock%}

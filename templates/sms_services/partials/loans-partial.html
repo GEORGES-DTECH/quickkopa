@@ -1,0 +1,30 @@
+{%load static%} 
+{%load humanize%} 
+{%for loan in loans%}
+<tr>
+  <td data-label="Check">
+    <input
+      type="checkbox"
+      class="form-check-input"
+      name="ids"
+      value="{{loan.id}}"
+    />
+  </td>
+  <td data-label="Due date">{{loan.due_date|date:'j b,y'}}</td>
+
+  <td data-label="Client"> 
+    {% filter force_escape|lower %} 
+    {{loan.client.full_name}}
+    {%endfilter%}
+  </td>
+
+  <td data-label="Phone">{{loan.client.phone1}}</td>
+
+  <td data-label="Loan payable">{{loan.payable_amount|intcomma}}</td>
+  <td data-label="Paid">({{loan.repayments|intcomma}})</td>
+  <td data-label="Outstanding">{{loan.outstanding_loan|intcomma}}</td>
+  <td data-label="Aging">{{loan.loan_aging_calculation}}</td>
+  <td data-label="Status">{{loan.status}}</td>
+</tr>
+
+{%endfor%}

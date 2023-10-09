@@ -1,0 +1,34 @@
+
+{%load static%}
+{%load humanize%}
+
+
+ 
+     {%for expense in expenses%}
+    
+                    <tr> 
+                    <td data-label="Check"><input type='checkbox' class="form-check-input" name='ids' value='{{expense.id}}'></td>   
+                      <td data-label="Date">{{expense.lending_date|date:'j b,y'}}</td> 
+                      
+                       <td data-label="Amount">{{expense.expense_amount|intcomma}}</td>
+                        <td data-label="Description">{{expense.category}}</td>
+
+                         <td data-label="Edit"><a class="bi bi-pencil-square links fw-bold"  role="button" 
+                          hx-get="{%url 'edit-expense' expense.id%}" hx-target="#container" hx-push-url="true" preload></a>
+                        </td>
+                        <td data-label="Added by">{{expense.staff.first_name}} {{expense.staff.last_name}}</td>
+
+                       
+                    </tr>
+ 
+ 
+    {%endfor%} 
+     
+
+    
+   
+     
+ 
+
+
+

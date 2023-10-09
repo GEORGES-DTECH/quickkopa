@@ -1,0 +1,56 @@
+
+{%load static%}
+{%load humanize%}
+
+
+ 
+     {%for expense in expenses%}
+     {%if expense.status == "bad debt" or expense.expense_amount > 0%}
+                    <tr> 
+                   
+                      <td >{{expense.lending_date|date:'j b,y'}}</td> 
+                       
+                       <td>{{expense.expense_amount|intcomma}}</td>
+                     
+
+                       <td>{{expense.interest_on_outstanding|intcomma}}</td>
+
+                       <td>{{expense.mode_of_payment|intcomma}}</td>
+                       {%if expense.expense_amount is not None%}
+                       <td>
+                          {%if expense.operating is not None%}
+                          {{expense.get_operating_display}}
+                          {%endif%}
+                          {%if expense.administration is not None%}
+                          {{expense.get_administration_display}}
+                          {%endif%}
+                          {%if expense.selling_and_distribution is not None%}
+
+                          {{expense.get_selling_and_distribution_display}}
+                          {%endif%}
+                          {%if expense.finance_expenses is not None%}
+
+                          {{expense.get_finance_expenses_display}}
+                          {%endif%}
+                        </td>
+                       {%else%}
+                       <td>{{expense.client.full_name}}(loan amount {{expense.loan_amount|intcomma}})</td>
+                       {%endif%}
+
+
+                         
+                      
+                       
+                    </tr>
+ 
+   {%endif%}
+    {%endfor%} 
+  
+
+    
+   
+     
+ 
+
+
+

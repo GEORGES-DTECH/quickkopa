@@ -1,0 +1,36 @@
+{%load crispy_forms_tags%}
+
+<div class="parent-div container-fluid mylist-group d-none" id="expense-form">
+  <ul class="list-group mylist-group  shadow">
+    <li class="list-group-item">
+      <h2 class="text-center">Add expense</h2>
+    </li>
+
+    <li class="list-group-item">
+      <form method="POST" enctype="multipart/form-data" autocomplete="off">
+        {%csrf_token%} {{form|crispy}} {{form.media}}
+        <br />
+        <div class="d-grid gap-2">
+          <button
+            class="btn btn-primary shadow-none save-btn"
+            type="submit"
+            hx-post="{%url 'add-expense'%}"
+            hx-target="#container"
+            hx-push-url="true"
+          >
+            Submit
+          </button>
+          <br />
+
+          <button
+            type="button"
+            class="btn btn-outline-secondary shadow-none"
+            _="on click remove .d-none from #expense-container then add .d-none to #expense-form"
+          >
+            Close
+          </button>
+        </div>
+      </form>
+    </li>
+  </ul>
+</div>

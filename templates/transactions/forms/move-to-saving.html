@@ -1,0 +1,45 @@
+{%extends 'base/index.html'%} 
+{%load crispy_forms_tags%} 
+{%block content%}
+{%include 'base/main-nav.html'%}
+<br /><br /><br />
+<div class="parent-div container-fluid mylist-group" id="loan-form">
+  <ul class="list-group mylist-group shadow">
+    <li class="list-group-item">
+      <h2 class="text-center">Move to saving</h2>
+    </li>
+
+    <li class="list-group-item">
+      <form method="POST" enctype="multipart/form-data" autocomplete="off">
+        {%csrf_token%}
+         {{form|crispy}}
+        {{form.media}}
+
+
+        
+        <small style="color: #800;">
+      
+         Choose savings .
+        
+        </small>
+        <br />
+        <div class="d-grid gap-2">
+          <button class="btn btn-primary save-btn" type="submit"  hx-post="{%url 'move-to-saving' payment.id%}" hx-push-url="true" hx-target="#container">
+            Submit
+          </button>
+
+          <br />
+          <a
+            hx-get="{%url 'payments'%}"
+            hx-target="#container"
+            hx-push-url="true"
+            class="btn btn-outline-secondary action-button shadow-none"
+            >Close</a
+          >
+        </div>
+      </form>
+    </li>
+  </ul>
+</div>
+
+{%endblock%}
